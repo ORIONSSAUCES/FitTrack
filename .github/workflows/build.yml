@@ -1,0 +1,65 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Test & Build Debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      # The wrapper jar is not committed to the repo.
+      # This regenerates the full wrapper before building.
+      - name: Generate Gradle wrapper
+        run: gradle wrapper --gradle-version 8.9
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fittrack-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      - name: Build summary
+        if: success()
+        run: |
+          echo "## ✅ Compilación exitosa" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📱 **Descarga el APK:** sección *Artifacts* de esta ejecución (arriba de este resumen)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Archivo: \`fittrack-debug-apk\` → contiene \`app-debug.apk\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Failure hint
+        if: failure()
+        run: |
+          echo "## ❌ La compilación falló" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Revisa el paso que falló arriba. Los errores más comunes:" >> $GITHUB_STEP_SUMMARY
+          echo "- Error de compilación Kotlin: revisar el log del paso 'Build debug APK'" >> $GITHUB_STEP_SUMMARY
+          echo "- Test fallido: revisar el log del paso 'Run unit tests'" >> $GITHUB_STEP_SUMMARY

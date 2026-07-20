@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">FitTrack</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_training">Entrenamiento</string>
+    <string name="nav_nutrition">Alimentación</string>
+    <string name="nav_progress">Progreso</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Common -->
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_add">Agregar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="placeholder_coming_soon">Disponible próximamente</string>
+</resources>
