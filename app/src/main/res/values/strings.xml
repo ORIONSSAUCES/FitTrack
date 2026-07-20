@@ -32,4 +32,29 @@
     <string name="profile_saved">Perfil guardado</string>
     <string name="error_invalid_height">Altura inválida (100–250 cm)</string>
     <string name="error_invalid_weight">Peso inválido (30–400 kg)</string>
+
+    <!-- Training tabs -->
+    <string name="training_tab_routines">Rutinas</string>
+    <string name="training_tab_exercises">Ejercicios</string>
+    <string name="training_tab_history">Historial</string>
+
+    <!-- Exercise library -->
+    <string name="exercise_search_hint">Buscar ejercicio…</string>
+    <string name="exercise_filter_favorites">Favoritos</string>
+    <string name="exercise_empty_list">No se encontraron ejercicios</string>
+    <string name="exercise_create">Nuevo ejercicio</string>
+    <string name="exercise_edit">Editar ejercicio</string>
+    <string name="exercise_name">Nombre del ejercicio</string>
+    <string name="exercise_info">Información</string>
+    <string name="exercise_muscle_primary">Músculo principal</string>
+    <string name="exercise_muscle_secondary">Músculos secundarios</string>
+    <string name="exercise_equipment">Equipamiento</string>
+    <string name="exercise_instructions">Instrucciones</string>
+    <string name="exercise_notes">Notas personales</string>
+    <string name="exercise_notes_hint">Ej: ajustar asiento en posición 4…</string>
+    <string name="exercise_records">Récords personales</string>
+    <string name="exercise_no_records">Todavía no hay récords. Aparecerán al registrar entrenamientos.</string>
+    <string name="exercise_delete_title">¿Eliminar ejercicio?</string>
+    <string name="exercise_delete_message">Se eliminará el ejercicio y su historial. Esta acción no se puede deshacer.</string>
+    <string name="error_name_required">El nombre es obligatorio</string>
 </resources>

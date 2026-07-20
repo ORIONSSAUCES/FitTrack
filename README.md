@@ -117,8 +117,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 1 — Perfil y configuración: datos personales, objetivo, tema claro/oscuro/auto, descanso por defecto, día de control
 
+- [x] Módulo 2 — Biblioteca de ejercicios: 57 ejercicios base, búsqueda, filtros, favoritos, ejercicios personalizados
+
 ### En desarrollo
-- [ ] Módulo 2 — Biblioteca de ejercicios
 - [ ] Módulo 3 — Rutinas
 - [ ] Módulo 4 — Entrenamiento activo
 - [ ] Módulo 5 — Historial y estadísticas

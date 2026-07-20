@@ -3,7 +3,10 @@ package com.brunoapp.fittrack.di
 import android.content.Context
 import androidx.room.Room
 import com.brunoapp.fittrack.data.database.FitTrackDatabase
+import com.brunoapp.fittrack.data.database.dao.ExerciseDao
+import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
 import com.brunoapp.fittrack.data.database.dao.ProfileDao
+import com.brunoapp.fittrack.data.database.migration.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,10 +26,16 @@ object DatabaseModule {
             FitTrackDatabase::class.java,
             FitTrackDatabase.DATABASE_NAME
         )
-            // Migrations are registered here as the schema evolves.
-            // .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2)
             .build()
 
     @Provides
     fun provideProfileDao(db: FitTrackDatabase): ProfileDao = db.profileDao()
+
+    @Provides
+    fun provideExerciseDao(db: FitTrackDatabase): ExerciseDao = db.exerciseDao()
+
+    @Provides
+    fun providePersonalRecordDao(db: FitTrackDatabase): PersonalRecordDao =
+        db.personalRecordDao()
 }

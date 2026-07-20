@@ -3,6 +3,19 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.2.0] - Sin publicar
+
+### Agregado
+- Módulo 2 — Biblioteca de ejercicios:
+  - 57 ejercicios base precargados con músculo principal, secundarios, equipamiento e instrucciones
+  - Búsqueda por nombre y filtros por grupo muscular, equipamiento y favoritos
+  - Pantalla de detalle con información completa y notas personales editables
+  - Crear, editar y eliminar ejercicios personalizados (con confirmación)
+  - Favoritos con estrella dorada
+  - Migración de base de datos v1 → v2 (sin pérdida de datos)
+  - Tabla de récords personales (se llenará al registrar entrenamientos)
+  - 8 pruebas unitarias del filtro de ejercicios
+
 ## [0.1.0] - Sin publicar
 
 ### Agregado
