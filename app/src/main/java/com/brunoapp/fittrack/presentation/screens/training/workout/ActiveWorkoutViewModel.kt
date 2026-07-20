@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,17 +30,31 @@ data class RestTimerState(
     val totalSeconds: Int
 )
 
+/**
+ * Wrapper distinguishing "still loading from DB" from "no active session".
+ * Without this the screen would close itself before Room emits the session.
+ */
+data class ActiveSessionUiState(
+    val isLoading: Boolean = true,
+    val session: WorkoutSession? = null
+)
+
 @HiltViewModel
 class ActiveWorkoutViewModel @Inject constructor(
     private val repository: WorkoutRepository
 ) : ViewModel() {
 
-    val session: StateFlow<WorkoutSession?> = repository.observeActiveSession()
+    val sessionState: StateFlow<ActiveSessionUiState> = repository.observeActiveSession()
+        .map { ActiveSessionUiState(isLoading = false, session = it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = null
+            initialValue = ActiveSessionUiState()
         )
+
+    /** True while finishSession() is running, so the screen waits for the summary. */
+    private val _finishing = MutableStateFlow(false)
+    val finishing: StateFlow<Boolean> = _finishing.asStateFlow()
 
     private val _inputs = MutableStateFlow<Map<Long, SetInput>>(emptyMap())
     val inputs: StateFlow<Map<Long, SetInput>> = _inputs.asStateFlow()
@@ -169,6 +184,7 @@ class ActiveWorkoutViewModel @Inject constructor(
     // ── Finish / discard ──
 
     fun onFinish() {
+        _finishing.value = true
         viewModelScope.launch {
             onSkipRest()
             _summary.value = repository.finishSession()

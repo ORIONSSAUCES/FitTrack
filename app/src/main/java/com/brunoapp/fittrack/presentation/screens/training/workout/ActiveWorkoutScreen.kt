@@ -2,6 +2,7 @@ package com.brunoapp.fittrack.presentation.screens.training.workout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +22,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicatorDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -62,7 +65,8 @@ fun ActiveWorkoutScreen(
     onExit: () -> Unit,
     viewModel: ActiveWorkoutViewModel = hiltViewModel()
 ) {
-    val session by viewModel.session.collectAsState()
+    val sessionState by viewModel.sessionState.collectAsState()
+    val finishing by viewModel.finishing.collectAsState()
     val restTimer by viewModel.restTimer.collectAsState()
     val newRecord by viewModel.newRecordEvent.collectAsState()
     val inputError by viewModel.inputError.collectAsState()
@@ -114,9 +118,20 @@ fun ActiveWorkoutScreen(
         return
     }
 
-    val current = session
+    // Still loading from DB, or finishing (summary on its way): show a spinner
+    if (sessionState.isLoading || (sessionState.session == null && finishing)) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
+    val current = sessionState.session
     if (current == null) {
-        // No active session (discarded or not started) — leave the screen
+        // Confirmed: no active session (discarded) — leave the screen
         LaunchedEffect(Unit) { onExit() }
         return
     }
