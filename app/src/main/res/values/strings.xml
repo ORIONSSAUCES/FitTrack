@@ -76,4 +76,47 @@
     <string name="routine_delete_message">Se eliminará “%1$s” con todos sus ejercicios configurados. Esta acción no se puede deshacer.</string>
     <string name="routine_empty_title">Sin rutinas todavía</string>
     <string name="routine_empty_message">Crea tu primera rutina con el botón +</string>
+
+    <!-- Active workout -->
+    <string name="workout_start">Empezar entrenamiento</string>
+    <string name="workout_continue">Continuar</string>
+    <string name="workout_in_progress">Entrenamiento en curso</string>
+    <string name="workout_minimize">Minimizar</string>
+    <string name="workout_finish">Terminar</string>
+    <string name="workout_finish_title">¿Terminar entrenamiento?</string>
+    <string name="workout_finish_message">Se guardará la sesión con las series completadas.</string>
+    <string name="workout_discard">Descartar</string>
+    <string name="workout_discard_title">¿Descartar entrenamiento?</string>
+    <string name="workout_discard_message">Se perderán todas las series de esta sesión. Esta acción no se puede deshacer.</string>
+    <string name="workout_active_exists_title">Entrenamiento activo</string>
+    <string name="workout_active_exists_message">Ya hay un entrenamiento en curso. ¿Quieres continuarlo o descartarlo y empezar este?</string>
+    <string name="workout_replace_active">Descartar y empezar</string>
+    <string name="workout_previous">Anterior</string>
+    <string name="workout_complete_set">Completar serie</string>
+    <string name="workout_skip_rest">Saltar</string>
+    <string name="workout_new_record">🏆 ¡Nuevo récord personal!</string>
+    <string name="workout_input_error">Ingresa peso y repeticiones válidos</string>
+    <string name="workout_summary_title">¡Entrenamiento terminado!</string>
+    <string name="workout_summary_duration">Duración</string>
+    <string name="workout_summary_exercises">Ejercicios realizados</string>
+    <string name="workout_summary_sets">Series completadas</string>
+    <string name="workout_summary_volume">Volumen total</string>
+    <string name="workout_summary_records">Récords nuevos</string>
+
+    <!-- History -->
+    <string name="history_this_week">Esta semana</string>
+    <string name="history_this_month">Este mes</string>
+    <string name="history_week_volume">kg semana</string>
+    <string name="history_empty">Todavía no hay entrenamientos registrados</string>
+    <string name="history_no_sets">Sin series completadas</string>
+    <string name="history_session_notes">Notas de la sesión</string>
+    <string name="history_notes_hint">¿Cómo te sentiste? ¿Algo para recordar?</string>
+    <string name="history_delete_title">¿Eliminar sesión?</string>
+    <string name="history_delete_message">Se eliminará esta sesión del historial. Los récords asociados se conservan. Esta acción no se puede deshacer.</string>
+
+    <!-- Exercise progression -->
+    <string name="exercise_best_set">Mejor serie</string>
+    <string name="exercise_best_1rm">1RM estimado</string>
+    <string name="exercise_progression">Progresión (1RM estimado)</string>
+    <string name="exercise_recent_sets">Series recientes</string>
 </resources>

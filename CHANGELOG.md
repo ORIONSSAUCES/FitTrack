@@ -3,6 +3,38 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.5.0] - Sin publicar
+
+### Agregado
+- Módulo 5 — Historial y estadísticas:
+  - Pestaña Historial con contadores: entrenamientos esta semana, este mes y volumen semanal
+  - Lista de sesiones con fecha, duración, series, volumen y récords 🏆
+  - Detalle de sesión: series completadas por ejercicio, RIR, récords marcados
+  - Notas editables por sesión
+  - Eliminar sesiones del historial (con confirmación)
+  - Progresión por ejercicio: mejor serie, 1RM estimado, gráfico de evolución y series recientes
+  - Gráfico de líneas propio sin dependencias externas
+  - 7 pruebas unitarias de utilidades de fecha
+
+## [0.4.0] - Sin publicar
+
+### Agregado
+- Módulo 4 — Entrenamiento activo:
+  - Iniciar entrenamiento desde cualquier rutina (botón ▶)
+  - Registro de peso, repeticiones y RIR por serie con campos grandes
+  - Columna "Anterior" con los valores de la última sesión del mismo ejercicio
+  - Peso prellenado desde la sesión anterior o la rutina
+  - Temporizador de descanso automático al completar serie: +15 s / −15 s / saltar
+  - El temporizador y la sesión sobreviven al cierre de la aplicación
+  - Detección de récords personales en vivo (fórmula Epley) con aviso 🏆
+  - Agregar/eliminar series durante la sesión
+  - Banner "Entrenamiento en curso" para continuar tras minimizar
+  - Protección: confirmación al descartar, al terminar y al reemplazar sesión activa
+  - Resumen final: duración, ejercicios, series, volumen total y récords
+  - Actualización automática del peso objetivo en la rutina tras entrenar
+  - Migración de base de datos v3 → v4
+  - 5 pruebas unitarias de récords y volumen
+
 ## [0.3.0] - Sin publicar
 
 ### Agregado

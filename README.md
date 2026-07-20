@@ -121,9 +121,11 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 3 — Rutinas: CRUD completo, día asignado, series objetivo con rangos y tipos, reordenar, duplicar
 
+- [x] Módulo 4 — Entrenamiento activo: registro por serie, temporizador persistente, récords, datos de sesión anterior
+
+- [x] Módulo 5 — Historial y estadísticas: sesiones, frecuencia, detalle con notas, progresión con gráfico
+
 ### En desarrollo
-- [ ] Módulo 4 — Entrenamiento activo
-- [ ] Módulo 5 — Historial y estadísticas
 - [ ] Módulo 6 — Alimentos y recetas
 - [ ] Módulo 7 — Plan de dieta
 - [ ] Módulo 8 — Registro diario de comidas

@@ -1,11 +1,9 @@
-package com.brunoapp.fittrack.presentation.screens.training.exercise
+package com.brunoapp.fittrack.presentation.screens.training.history
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brunoapp.fittrack.domain.model.Exercise
-import com.brunoapp.fittrack.domain.model.ExerciseSetHistory
-import com.brunoapp.fittrack.domain.repository.ExerciseRepository
+import com.brunoapp.fittrack.domain.model.WorkoutSession
 import com.brunoapp.fittrack.domain.repository.WorkoutRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,24 +15,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExerciseDetailViewModel @Inject constructor(
-    private val repository: ExerciseRepository,
-    workoutRepository: WorkoutRepository,
+class WorkoutDetailViewModel @Inject constructor(
+    private val repository: WorkoutRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val exerciseId: Long = checkNotNull(savedStateHandle["exerciseId"])
+    private val sessionId: Long = checkNotNull(savedStateHandle["sessionId"])
 
-    /** Completed set history across finished sessions, oldest first. */
-    val history: StateFlow<List<ExerciseSetHistory>> =
-        workoutRepository.observeExerciseHistory(exerciseId)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyList()
-            )
-
-    val exercise: StateFlow<Exercise?> = repository.observeById(exerciseId)
+    val session: StateFlow<WorkoutSession?> = repository.observeSession(sessionId)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -54,23 +42,14 @@ class ExerciseDetailViewModel @Inject constructor(
     fun onSaveNotes() {
         val notes = _notesDraft.value ?: return
         viewModelScope.launch {
-            repository.updateNotes(exerciseId, notes.trim())
+            repository.updateSessionNotes(sessionId, notes.trim())
             _notesDraft.value = null
         }
     }
 
-    fun onToggleFavorite() {
-        val current = exercise.value ?: return
-        viewModelScope.launch {
-            repository.setFavorite(current.id, !current.isFavorite)
-        }
-    }
-
     fun onDelete() {
-        val current = exercise.value ?: return
-        if (!current.isCustom) return
         viewModelScope.launch {
-            repository.delete(current)
+            repository.deleteSession(sessionId)
             _deleted.value = true
         }
     }

@@ -15,9 +15,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -28,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,12 +53,55 @@ private val dayNames = listOf(
 fun RoutineListScreen(
     onRoutineClick: (Long) -> Unit,
     onCreateClick: () -> Unit,
+    onOpenWorkout: () -> Unit,
     viewModel: RoutineListViewModel = hiltViewModel()
 ) {
     val routines by viewModel.routines.collectAsState()
+    val activeSession by viewModel.activeSession.collectAsState()
+    val pendingStart by viewModel.pendingStart.collectAsState()
+    val navigateToWorkout by viewModel.navigateToWorkout.collectAsState()
     var routineToDelete by remember { mutableStateOf<Routine?>(null) }
 
+    LaunchedEffect(navigateToWorkout) {
+        if (navigateToWorkout) {
+            viewModel.onNavigatedToWorkout()
+            onOpenWorkout()
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+        activeSession?.let { session ->
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.workout_in_progress),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = session.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Button(onClick = onOpenWorkout) {
+                        Text(stringResource(R.string.workout_continue))
+                    }
+                }
+            }
+        }
         if (routines.isEmpty()) {
             Column(
                 modifier = Modifier
@@ -86,12 +133,14 @@ fun RoutineListScreen(
                     RoutineCard(
                         routine = routine,
                         onClick = { onRoutineClick(routine.id) },
+                        onStart = { viewModel.onStartWorkout(routine) },
                         onDuplicate = { viewModel.onDuplicate(routine) },
                         onDelete = { routineToDelete = routine }
                     )
                 }
                 item { Spacer(modifier = Modifier.height(80.dp)) }
             }
+        }
         }
 
         FloatingActionButton(
@@ -104,6 +153,27 @@ fun RoutineListScreen(
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.routine_create))
         }
+    }
+
+    pendingStart?.let { routine ->
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissPendingStart,
+            title = { Text(stringResource(R.string.workout_active_exists_title)) },
+            text = { Text(stringResource(R.string.workout_active_exists_message)) },
+            confirmButton = {
+                TextButton(onClick = viewModel::onConfirmReplaceActive) {
+                    Text(
+                        stringResource(R.string.workout_replace_active),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::onContinueActive) {
+                    Text(stringResource(R.string.workout_continue))
+                }
+            }
+        )
     }
 
     routineToDelete?.let { routine ->
@@ -137,6 +207,7 @@ fun RoutineListScreen(
 private fun RoutineCard(
     routine: Routine,
     onClick: () -> Unit,
+    onStart: () -> Unit,
     onDuplicate: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -174,6 +245,13 @@ private fun RoutineCard(
                         label = { Text(dayNames[day]) }
                     )
                 }
+            }
+            IconButton(onClick = onStart) {
+                Icon(
+                    Icons.Filled.PlayArrow,
+                    contentDescription = stringResource(R.string.workout_start),
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
             Box {
                 IconButton(onClick = { menuExpanded = true }) {

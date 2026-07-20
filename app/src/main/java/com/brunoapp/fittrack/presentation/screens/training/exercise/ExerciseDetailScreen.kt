@@ -41,6 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
+import com.brunoapp.fittrack.core.utils.DateUtils
+import com.brunoapp.fittrack.presentation.components.SimpleLineChart
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +53,7 @@ fun ExerciseDetailScreen(
     viewModel: ExerciseDetailViewModel = hiltViewModel()
 ) {
     val exercise by viewModel.exercise.collectAsState()
+    val history by viewModel.history.collectAsState()
     val notesDraft by viewModel.notesDraft.collectAsState()
     val deleted by viewModel.deleted.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -158,13 +161,68 @@ fun ExerciseDetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Records + history placeholder (populated in module 4/5)
+            // Records + progression
             InfoCard(title = stringResource(R.string.exercise_records)) {
-                Text(
-                    text = stringResource(R.string.exercise_no_records),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (history.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.exercise_no_records),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    val best = history.maxByOrNull { it.estimated1rm }
+                    if (best != null) {
+                        InfoRow(
+                            label = stringResource(R.string.exercise_best_set),
+                            value = "${formatWeight(best.weightKg)} kg × ${best.reps}"
+                        )
+                        InfoRow(
+                            label = stringResource(R.string.exercise_best_1rm),
+                            value = "${formatWeight(best.estimated1rm)} kg"
+                        )
+                    }
+
+                    // Progression chart: best estimated 1RM per session
+                    val bestPerSession = history
+                        .groupBy { it.sessionId }
+                        .toList()
+                        .sortedBy { (_, sets) -> sets.first().date }
+                        .map { (_, sets) -> sets.maxOf { it.estimated1rm } }
+
+                    if (bestPerSession.size >= 2) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(R.string.exercise_progression),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SimpleLineChart(
+                            values = bestPerSession,
+                            minLabel = "${formatWeight(bestPerSession.min())} kg",
+                            maxLabel = "${formatWeight(bestPerSession.max())} kg"
+                        )
+                    }
+
+                    // Recent sets
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(R.string.exercise_recent_sets),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    history.takeLast(8).reversed().forEach { set ->
+                        Text(
+                            text = "${DateUtils.formatShortDate(set.date)}  ·  " +
+                                "${formatWeight(set.weightKg)} kg × ${set.reps}" +
+                                if (set.isPersonalRecord) "  🏆" else "",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
+                }
             }
         }
     }
@@ -229,3 +287,8 @@ private fun InfoRow(label: String, value: String) {
         )
     }
 }
+
+
+private fun formatWeight(value: Double): String =
+    if (value % 1.0 == 0.0) value.toInt().toString()
+    else "%.1f".format(value)
