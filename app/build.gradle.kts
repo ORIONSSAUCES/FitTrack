@@ -15,17 +15,32 @@ android {
         applicationId = "com.brunoapp.fittrack"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
+        versionCode = 2
         versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // Fixed personal signing key so every CI build has the same signature
+        // and Android accepts updates without uninstalling.
+        // This app is personal and the repo is private; committing the keystore
+        // is a deliberate, acceptable trade-off in this context.
+        create("fittrack") {
+            storeFile = rootProject.file("signing/fittrack.keystore")
+            storePassword = "fittrack2026"
+            keyAlias = "fittrack"
+            keyPassword = "fittrack2026"
+        }
+    }
+
     buildTypes {
         debug {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("fittrack")
         }
         release {
+            signingConfig = signingConfigs.getByName("fittrack")
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

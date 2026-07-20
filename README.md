@@ -52,6 +52,22 @@ Requisitos: Android 8.0+ (API 26).
 > "instalar aplicaciones de origen desconocido". Es normal y seguro:
 > el APK lo compila GitHub Actions desde este mismo código.
 
+## 🔄 Actualizaciones automáticas en el teléfono (Obtainium)
+
+Para recibir aviso de nuevas versiones e instalarlas directo desde el celular:
+
+1. Instala [Obtainium](https://github.com/ImranR98/Obtainium/releases) (descarga el APK `arm64-v8a`).
+2. Como este repo es privado, crea un token de lectura:
+   - GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens** → *Generate new token*.
+   - Repository access: *Only select repositories* → `FitTrack`.
+   - Permissions → Repository permissions → **Contents: Read-only**.
+3. En Obtainium: **Ajustes → Fuente: GitHub →** pega el token en *API key*.
+4. En Obtainium: **➕ Agregar app** → URL: `https://github.com/ORIONSSAUCES/FitTrack`.
+5. Listo: cada vez que se publique una Release (etiqueta `v*.*.*`), Obtainium te notifica y la instalas con un toque.
+
+Todas las builds están firmadas con la misma clave (`signing/fittrack.keystore`),
+por lo que las actualizaciones se instalan encima sin perder datos.
+
 ## 🛠️ Compilar localmente
 
 ### Requisitos
@@ -99,8 +115,9 @@ app/src/main/java/com/brunoapp/fittrack/
 ### Terminado
 - [x] Módulo 0 — Proyecto base: Gradle KTS, Hilt, Room, Navigation, tema visual, CI/CD
 
+- [x] Módulo 1 — Perfil y configuración: datos personales, objetivo, tema claro/oscuro/auto, descanso por defecto, día de control
+
 ### En desarrollo
-- [ ] Módulo 1 — Perfil y configuración
 - [ ] Módulo 2 — Biblioteca de ejercicios
 - [ ] Módulo 3 — Rutinas
 - [ ] Módulo 4 — Entrenamiento activo

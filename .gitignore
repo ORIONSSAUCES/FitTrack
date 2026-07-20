@@ -28,3 +28,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Exception: fixed personal signing key (private repo, personal app)
+!signing/fittrack.keystore
