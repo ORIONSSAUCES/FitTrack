@@ -16,11 +16,14 @@ import androidx.compose.ui.res.stringResource
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.presentation.components.PlaceholderScreen
 import com.brunoapp.fittrack.presentation.screens.training.exercise.ExerciseLibraryScreen
+import com.brunoapp.fittrack.presentation.screens.training.routine.RoutineListScreen
 
 @Composable
 fun TrainingScreen(
     onExerciseClick: (Long) -> Unit,
-    onCreateExercise: () -> Unit
+    onCreateExercise: () -> Unit,
+    onRoutineClick: (Long) -> Unit,
+    onCreateRoutine: () -> Unit
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     val tabs = listOf(
@@ -45,7 +48,10 @@ fun TrainingScreen(
         }
 
         when (selectedTab) {
-            0 -> PlaceholderScreen(title = stringResource(R.string.training_tab_routines))
+            0 -> RoutineListScreen(
+                onRoutineClick = onRoutineClick,
+                onCreateClick = onCreateRoutine
+            )
             1 -> ExerciseLibraryScreen(
                 onExerciseClick = onExerciseClick,
                 onCreateClick = onCreateExercise

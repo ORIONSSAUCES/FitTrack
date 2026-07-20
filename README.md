@@ -119,8 +119,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 2 — Biblioteca de ejercicios: 57 ejercicios base, búsqueda, filtros, favoritos, ejercicios personalizados
 
+- [x] Módulo 3 — Rutinas: CRUD completo, día asignado, series objetivo con rangos y tipos, reordenar, duplicar
+
 ### En desarrollo
-- [ ] Módulo 3 — Rutinas
 - [ ] Módulo 4 — Entrenamiento activo
 - [ ] Módulo 5 — Historial y estadísticas
 - [ ] Módulo 6 — Alimentos y recetas

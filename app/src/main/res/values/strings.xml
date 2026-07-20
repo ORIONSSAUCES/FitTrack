@@ -57,4 +57,23 @@
     <string name="exercise_delete_title">¿Eliminar ejercicio?</string>
     <string name="exercise_delete_message">Se eliminará el ejercicio y su historial. Esta acción no se puede deshacer.</string>
     <string name="error_name_required">El nombre es obligatorio</string>
+
+    <!-- Routines -->
+    <string name="routine_create">Nueva rutina</string>
+    <string name="routine_edit">Editar rutina</string>
+    <string name="routine_name">Nombre de la rutina</string>
+    <string name="routine_description">Descripción (opcional)</string>
+    <string name="routine_day">Día asignado</string>
+    <string name="routine_day_none">Sin día fijo</string>
+    <string name="routine_exercises">Ejercicios</string>
+    <string name="routine_add_exercise">Agregar ejercicio</string>
+    <string name="routine_add_set">Agregar serie</string>
+    <string name="routine_rest_seconds">Descanso entre series (segundos)</string>
+    <string name="routine_pick_exercise">Elegir ejercicio</string>
+    <string name="routine_exercise_count">%1$d ejercicios</string>
+    <string name="routine_duplicate">Duplicar</string>
+    <string name="routine_delete_title">¿Eliminar rutina?</string>
+    <string name="routine_delete_message">Se eliminará “%1$s” con todos sus ejercicios configurados. Esta acción no se puede deshacer.</string>
+    <string name="routine_empty_title">Sin rutinas todavía</string>
+    <string name="routine_empty_message">Crea tu primera rutina con el botón +</string>
 </resources>

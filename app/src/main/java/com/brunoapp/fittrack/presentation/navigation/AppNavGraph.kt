@@ -26,6 +26,7 @@ import com.brunoapp.fittrack.presentation.screens.progress.ProgressScreen
 import com.brunoapp.fittrack.presentation.screens.training.TrainingScreen
 import com.brunoapp.fittrack.presentation.screens.training.exercise.ExerciseDetailScreen
 import com.brunoapp.fittrack.presentation.screens.training.exercise.ExerciseEditScreen
+import com.brunoapp.fittrack.presentation.screens.training.routine.RoutineEditScreen
 
 @Composable
 fun FitTrackApp() {
@@ -99,6 +100,12 @@ fun FitTrackApp() {
                     },
                     onCreateExercise = {
                         navController.navigate("exercise_edit")
+                    },
+                    onRoutineClick = { id ->
+                        navController.navigate("routine_edit?routineId=$id")
+                    },
+                    onCreateRoutine = {
+                        navController.navigate("routine_edit")
                     }
                 )
             }
@@ -123,6 +130,18 @@ fun FitTrackApp() {
                 )
             ) {
                 ExerciseEditScreen(onBack = { navController.popBackStack() })
+            }
+
+            composable(
+                route = "routine_edit?routineId={routineId}",
+                arguments = listOf(
+                    navArgument("routineId") {
+                        type = NavType.LongType
+                        defaultValue = -1L
+                    }
+                )
+            ) {
+                RoutineEditScreen(onBack = { navController.popBackStack() })
             }
 
             composable(Screen.Nutrition.route) { NutritionScreen() }

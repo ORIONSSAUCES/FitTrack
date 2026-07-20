@@ -6,7 +6,9 @@ import com.brunoapp.fittrack.data.database.FitTrackDatabase
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
 import com.brunoapp.fittrack.data.database.dao.ProfileDao
+import com.brunoapp.fittrack.data.database.dao.RoutineDao
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_1_2
+import com.brunoapp.fittrack.data.database.migration.MIGRATION_2_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +28,7 @@ object DatabaseModule {
             FitTrackDatabase::class.java,
             FitTrackDatabase.DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
 
     @Provides
@@ -38,4 +40,7 @@ object DatabaseModule {
     @Provides
     fun providePersonalRecordDao(db: FitTrackDatabase): PersonalRecordDao =
         db.personalRecordDao()
+
+    @Provides
+    fun provideRoutineDao(db: FitTrackDatabase): RoutineDao = db.routineDao()
 }

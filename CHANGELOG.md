@@ -3,6 +3,19 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.3.0] - Sin publicar
+
+### Agregado
+- Módulo 3 — Rutinas:
+  - Crear, editar, duplicar y eliminar rutinas (con confirmación)
+  - Asignación de día de la semana a cada rutina
+  - Agregar ejercicios desde la biblioteca con buscador
+  - Series objetivo por ejercicio: tipo (calentamiento/normal/descendente/al fallo), rango de repeticiones
+  - Descanso configurable y notas por ejercicio
+  - Reordenar ejercicios con flechas
+  - Migración de base de datos v2 → v3
+  - 6 pruebas unitarias de reordenamiento
+
 ## [0.2.0] - Sin publicar
 
 ### Agregado
