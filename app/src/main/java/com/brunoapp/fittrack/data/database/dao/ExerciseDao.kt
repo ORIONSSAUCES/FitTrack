@@ -25,6 +25,11 @@ interface ExerciseDao {
     @Query("SELECT name FROM exercise")
     suspend fun getAllNamesOnce(): List<String>
 
+    @Query("SELECT id, name FROM exercise")
+    suspend fun getAllIdNamePairs(): List<IdName>
+
+    data class IdName(val id: Long, val name: String)
+
     @Upsert
     suspend fun upsert(exercise: ExerciseEntity): Long
 

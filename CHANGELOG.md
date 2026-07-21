@@ -3,6 +3,24 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.0.0] - MVP completo
+
+### Agregado
+- Pantalla de Inicio:
+  - Saludo con nombre, entrenamiento de hoy con botón Comenzar/Continuar
+  - Entrenamientos de la semana, calorías y proteína vs objetivo
+  - Comidas completadas, cumplimiento semanal
+  - Peso actual con diferencia vs registro anterior y día de control
+  - Las tarjetas navegan a su sección al tocarlas
+- Rutinas PPL precargadas (plan basado en evidencia):
+  - Push A/B, Pull A/B, Legs A/B con días asignados de lunes a sábado
+  - Series, rangos de repeticiones y RIR objetivo configurados (última serie al fallo)
+  - Notas con series de aproximación y alternativas para gym lleno
+- Recordatorios locales (WorkManager, sin internet):
+  - Entrenamiento diario a la hora elegida
+  - Pesaje semanal el día de control a las 08:00
+  - Solicitud de permiso de notificaciones en Android 13+
+
 ## [0.12.0] - Sin publicar
 
 ### Agregado

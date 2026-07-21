@@ -217,6 +217,8 @@ fun ProfileScreen(
                 }
             }
 
+            RemindersSection()
+
             BackupSection(snackbarHostState = snackbarHostState)
 
             Button(

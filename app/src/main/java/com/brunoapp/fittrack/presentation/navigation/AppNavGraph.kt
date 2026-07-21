@@ -95,7 +95,13 @@ fun FitTrackApp() {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { HomeScreen() }
+            composable(Screen.Home.route) {
+                HomeScreen(
+                    onOpenWorkout = { navController.navigate(Screen.ActiveWorkout.route) },
+                    onGoToNutrition = { navController.navigate(Screen.Nutrition.route) },
+                    onGoToProgress = { navController.navigate(Screen.Progress.route) }
+                )
+            }
 
             composable(Screen.Training.route) {
                 TrainingScreen(

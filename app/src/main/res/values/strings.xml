@@ -227,4 +227,32 @@
     <string name="backup_import_title">¿Restaurar copia?</string>
     <string name="backup_import_warning">Se reemplazarán TODOS los datos actuales por los del archivo. Esta acción no se puede deshacer. ¿Continuar?</string>
     <string name="backup_import_confirm">Reemplazar todo</string>
+
+    <!-- Home -->
+    <string name="home_greeting">Hola, %1$s 💪</string>
+    <string name="home_greeting_anon">Hola 💪</string>
+    <string name="home_today_workout">Entrenamiento de hoy</string>
+    <string name="home_no_routine_today">Sin rutina asignada para hoy</string>
+    <string name="home_week_sessions">%1$d entrenamientos esta semana</string>
+    <string name="home_nutrition_today">Nutrición de hoy</string>
+    <string name="home_day_not_started">Todavía no registraste el día — toca para empezar</string>
+    <string name="home_calories">Calorías</string>
+    <string name="home_protein">Proteína</string>
+    <string name="home_meals_completed">Comidas: %1$d/%2$d</string>
+    <string name="home_weight">Peso corporal</string>
+    <string name="home_no_weight">Sin registros</string>
+    <string name="home_next_weigh_in">Control semanal: %1$s</string>
+
+    <!-- Reminders -->
+    <string name="notification_channel_reminders">Recordatorios</string>
+    <string name="reminders_section_title">Recordatorios</string>
+    <string name="reminder_training_label">Entrenamiento diario</string>
+    <string name="reminder_training_hint">Notificación a la hora elegida</string>
+    <string name="reminder_time_label">Hora</string>
+    <string name="reminder_weight_label">Pesaje semanal</string>
+    <string name="reminder_weight_hint">El día de control, a las 08:00</string>
+    <string name="reminder_training_title">Hora de entrenar 💪</string>
+    <string name="reminder_training_text">Tu rutina de hoy te espera. ¡Una repetición más!</string>
+    <string name="reminder_weight_title">Día de control ⚖️</string>
+    <string name="reminder_weight_text">Pésate en ayunas y regístralo en FitTrack.</string>
 </resources>

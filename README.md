@@ -135,9 +135,12 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 10 — Backup: exportar/importar JSON, CSV de pesos y entrenamientos + catálogo en español con ranking
 
-### En desarrollo
-- [ ] Módulo 11 — Datos de demostración
-- [ ] Módulo 12 — Pulido final
+- [x] Módulo 11 — Inicio: resumen del día (entrenamiento, nutrición, peso, cumplimiento)
+- [x] Módulo 12 — Recordatorios locales + rutinas PPL precargadas
+
+### 🎉 MVP completo (v1.0.0)
+
+Los 18 puntos del MVP obligatorio están implementados y funcionando.
 
 Ver [CHANGELOG.md](CHANGELOG.md) para el historial de cambios.
 

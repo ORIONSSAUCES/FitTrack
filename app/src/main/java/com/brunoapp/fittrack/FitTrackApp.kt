@@ -1,6 +1,8 @@
 package com.brunoapp.fittrack
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import com.brunoapp.fittrack.data.database.seed.DatabaseSeeder
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -19,8 +21,19 @@ class FitTrackApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        createNotificationChannel()
         applicationScope.launch {
             seeder.seedIfNeeded()
         }
+    }
+
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            "reminders",
+            getString(R.string.notification_channel_reminders),
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        getSystemService(NotificationManager::class.java)
+            .createNotificationChannel(channel)
     }
 }

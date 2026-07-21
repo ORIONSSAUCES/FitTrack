@@ -22,6 +22,9 @@ interface RoutineDao {
     @Query("SELECT * FROM routine WHERE id = :id")
     suspend fun getWithExercises(id: Long): RoutineWithExercises?
 
+    @Query("SELECT COUNT(*) FROM routine")
+    suspend fun countRoutines(): Int
+
     @Insert
     suspend fun insertRoutine(routine: RoutineEntity): Long
 

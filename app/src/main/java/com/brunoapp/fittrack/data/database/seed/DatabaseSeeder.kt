@@ -3,6 +3,10 @@ package com.brunoapp.fittrack.data.database.seed
 import com.brunoapp.fittrack.data.database.dao.DietDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.FoodDao
+import com.brunoapp.fittrack.data.database.dao.RoutineDao
+import com.brunoapp.fittrack.data.database.entity.RoutineEntity
+import com.brunoapp.fittrack.data.database.entity.RoutineExerciseEntity
+import com.brunoapp.fittrack.data.database.entity.RoutineSetTemplateEntity
 import com.brunoapp.fittrack.data.database.entity.DietPlanDayEntity
 import com.brunoapp.fittrack.data.database.entity.DietPlanEntity
 import com.brunoapp.fittrack.data.database.entity.PlannedMealEntity
@@ -21,7 +25,8 @@ import javax.inject.Singleton
 class DatabaseSeeder @Inject constructor(
     private val exerciseDao: ExerciseDao,
     private val foodDao: FoodDao,
-    private val dietDao: DietDao
+    private val dietDao: DietDao,
+    private val routineDao: RoutineDao
 ) {
     suspend fun seedIfNeeded() {
         if (exerciseDao.count() == 0) {
@@ -49,6 +54,49 @@ class DatabaseSeeder @Inject constructor(
         }
         if (dietDao.countPlans() == 0) {
             seedDietPlan()
+        }
+        if (routineDao.countRoutines() == 0) {
+            seedRoutines()
+        }
+    }
+
+    private suspend fun seedRoutines() {
+        val idByName = exerciseDao.getAllIdNamePairs().associate { it.name to it.id }
+        val now = Instant.now().toString()
+
+        RoutineSeed.all().forEach { seed ->
+            val resolved = seed.exercises.mapNotNull { exercise ->
+                idByName[exercise.name]?.let { id -> exercise to id }
+            }
+            if (resolved.size != seed.exercises.size) return@forEach
+
+            routineDao.saveFullRoutine(
+                routine = RoutineEntity(
+                    name = seed.name,
+                    description = seed.description,
+                    dayOfWeek = seed.dayOfWeek,
+                    createdAt = now,
+                    updatedAt = now
+                ),
+                exercises = resolved.mapIndexed { index, (exercise, exerciseId) ->
+                    RoutineExerciseEntity(
+                        routineId = 0,
+                        exerciseId = exerciseId,
+                        position = index,
+                        restSeconds = exercise.restSeconds,
+                        notes = exercise.notes
+                    ) to exercise.sets.mapIndexed { setIndex, set ->
+                        RoutineSetTemplateEntity(
+                            routineExerciseId = 0,
+                            setNumber = setIndex + 1,
+                            setType = "NORMAL",
+                            repsMin = set.repsMin,
+                            repsMax = set.repsMax,
+                            targetRir = set.rir
+                        )
+                    }
+                }
+            )
         }
     }
 
