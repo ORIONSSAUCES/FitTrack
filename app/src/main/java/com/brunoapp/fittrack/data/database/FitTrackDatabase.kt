@@ -3,6 +3,7 @@ package com.brunoapp.fittrack.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.brunoapp.fittrack.data.database.dao.ActiveWorkoutStateDao
+import com.brunoapp.fittrack.data.database.dao.DietDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.FoodDao
 import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
@@ -10,9 +11,13 @@ import com.brunoapp.fittrack.data.database.dao.ProfileDao
 import com.brunoapp.fittrack.data.database.dao.RoutineDao
 import com.brunoapp.fittrack.data.database.dao.WorkoutDao
 import com.brunoapp.fittrack.data.database.entity.ActiveWorkoutStateEntity
+import com.brunoapp.fittrack.data.database.entity.DietPlanDayEntity
+import com.brunoapp.fittrack.data.database.entity.DietPlanEntity
 import com.brunoapp.fittrack.data.database.entity.ExerciseEntity
 import com.brunoapp.fittrack.data.database.entity.FoodItemEntity
 import com.brunoapp.fittrack.data.database.entity.PersonalRecordEntity
+import com.brunoapp.fittrack.data.database.entity.PlannedMealEntity
+import com.brunoapp.fittrack.data.database.entity.PlannedMealItemEntity
 import com.brunoapp.fittrack.data.database.entity.ProfileEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeIngredientEntity
@@ -36,6 +41,7 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
  *  3 — + routine, routine_exercise, routine_set_template
  *  4 — + workout_session, workout_exercise, workout_set, active_workout_state
  *  5 — + food_item, recipe, recipe_ingredient
+ *  6 — + diet_plan, diet_plan_day, planned_meal, planned_meal_item
  */
 @Database(
     entities = [
@@ -51,9 +57,13 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
         ActiveWorkoutStateEntity::class,
         FoodItemEntity::class,
         RecipeEntity::class,
-        RecipeIngredientEntity::class
+        RecipeIngredientEntity::class,
+        DietPlanEntity::class,
+        DietPlanDayEntity::class,
+        PlannedMealEntity::class,
+        PlannedMealItemEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class FitTrackDatabase : RoomDatabase() {
@@ -64,6 +74,7 @@ abstract class FitTrackDatabase : RoomDatabase() {
     abstract fun workoutDao(): WorkoutDao
     abstract fun activeWorkoutStateDao(): ActiveWorkoutStateDao
     abstract fun foodDao(): FoodDao
+    abstract fun dietDao(): DietDao
 
     companion object {
         const val DATABASE_NAME = "fittrack.db"

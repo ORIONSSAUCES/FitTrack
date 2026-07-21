@@ -127,8 +127,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 6 — Alimentos y recetas: 20 alimentos de la dieta precargados, 4 recetas, macros en vivo
 
+- [x] Módulo 7 — Plan de dieta: menú semanal real precargado, objetivos entreno/descanso, macros vs objetivo por día
+
 ### En desarrollo
-- [ ] Módulo 7 — Plan de dieta
 - [ ] Módulo 8 — Registro diario de comidas
 - [ ] Módulo 9 — Peso, medidas y fotos
 - [ ] Módulo 10 — Backup y recordatorios

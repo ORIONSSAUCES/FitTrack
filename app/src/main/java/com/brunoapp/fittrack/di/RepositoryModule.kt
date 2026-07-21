@@ -1,10 +1,12 @@
 package com.brunoapp.fittrack.di
 
+import com.brunoapp.fittrack.data.repository.DietRepositoryImpl
 import com.brunoapp.fittrack.data.repository.ExerciseRepositoryImpl
 import com.brunoapp.fittrack.data.repository.FoodRepositoryImpl
 import com.brunoapp.fittrack.data.repository.ProfileRepositoryImpl
 import com.brunoapp.fittrack.data.repository.RoutineRepositoryImpl
 import com.brunoapp.fittrack.data.repository.WorkoutRepositoryImpl
+import com.brunoapp.fittrack.domain.repository.DietRepository
 import com.brunoapp.fittrack.domain.repository.ExerciseRepository
 import com.brunoapp.fittrack.domain.repository.FoodRepository
 import com.brunoapp.fittrack.domain.repository.ProfileRepository
@@ -39,4 +41,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindFoodRepository(impl: FoodRepositoryImpl): FoodRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDietRepository(impl: DietRepositoryImpl): DietRepository
 }

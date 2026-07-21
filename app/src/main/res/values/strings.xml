@@ -159,4 +159,16 @@
     <string name="recipe_pick_food">Elegir alimento</string>
     <string name="recipe_ingredient_count">%1$d ingredientes</string>
     <string name="recipe_delete_title">¿Eliminar receta?</string>
+
+    <!-- Diet plan -->
+    <string name="diet_no_plan">No hay ningún plan de dieta</string>
+    <string name="diet_create_plan">Crear plan</string>
+    <string name="diet_plan_name">Nombre del plan</string>
+    <string name="diet_day_empty">Este día no tiene comidas configuradas</string>
+    <string name="diet_training_day">Día de entrenamiento</string>
+    <string name="diet_rest_day">Día de descanso</string>
+    <string name="diet_day_totals">Totales del día vs objetivo</string>
+    <string name="diet_add_meal">Agregar comida</string>
+    <string name="diet_meal_name">Nombre de la comida</string>
+    <string name="diet_add_item">Agregar alimento o receta</string>
 </resources>

@@ -3,6 +3,19 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.9.0] - Sin publicar
+
+### Agregado
+- Módulo 7 — Plan de dieta semanal:
+  - Plan "Dieta base — Volumen" precargado con el menú completo de lunes a domingo
+  - 5 comidas por día con cantidades exactas (desayuno, media mañana, almuerzo, pre-entreno/merienda, cena)
+  - Objetivos diferenciados: entrenamiento (2700 kcal / 200 g prot) y descanso (2550 kcal / 195 g prot)
+  - Selector de día L-M-X-J-V-S-D con totales de macros vs objetivo (barras de progreso)
+  - Marcar cada día como entrenamiento o descanso
+  - Agregar/quitar comidas e items (alimentos o recetas) con cantidades editables
+  - Migración de base de datos v5 → v6
+  - 3 pruebas unitarias de totales del plan
+
 ## [0.8.0] - Sin publicar
 
 ### Agregado

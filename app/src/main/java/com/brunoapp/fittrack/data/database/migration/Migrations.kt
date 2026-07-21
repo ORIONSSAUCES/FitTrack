@@ -233,3 +233,81 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_recipe_ingredient_foodItemId` ON `recipe_ingredient` (`foodItemId`)")
     }
 }
+
+/**
+ * v5 → v6: adds weekly diet plans.
+ */
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `diet_plan` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `name` TEXT NOT NULL,
+                `description` TEXT NOT NULL,
+                `isActive` INTEGER NOT NULL,
+                `caloriesTraining` INTEGER NOT NULL,
+                `proteinTraining` REAL NOT NULL,
+                `carbsTraining` REAL NOT NULL,
+                `fatTraining` REAL NOT NULL,
+                `fiberTraining` REAL NOT NULL,
+                `waterTrainingMl` INTEGER NOT NULL,
+                `caloriesRest` INTEGER NOT NULL,
+                `proteinRest` REAL NOT NULL,
+                `carbsRest` REAL NOT NULL,
+                `fatRest` REAL NOT NULL,
+                `fiberRest` REAL NOT NULL,
+                `waterRestMl` INTEGER NOT NULL,
+                `createdAt` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `diet_plan_day` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `dietPlanId` INTEGER NOT NULL,
+                `dayOfWeek` INTEGER NOT NULL,
+                `isTrainingDay` INTEGER NOT NULL,
+                FOREIGN KEY(`dietPlanId`) REFERENCES `diet_plan`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_diet_plan_day_dietPlanId` ON `diet_plan_day` (`dietPlanId`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `planned_meal` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `dietPlanDayId` INTEGER NOT NULL,
+                `name` TEXT NOT NULL,
+                `mealOrder` INTEGER NOT NULL,
+                `notes` TEXT NOT NULL,
+                FOREIGN KEY(`dietPlanDayId`) REFERENCES `diet_plan_day`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_planned_meal_dietPlanDayId` ON `planned_meal` (`dietPlanDayId`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `planned_meal_item` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `plannedMealId` INTEGER NOT NULL,
+                `foodItemId` INTEGER,
+                `recipeId` INTEGER,
+                `quantity` REAL NOT NULL,
+                FOREIGN KEY(`plannedMealId`) REFERENCES `planned_meal`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`foodItemId`) REFERENCES `food_item`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`recipeId`) REFERENCES `recipe`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_planned_meal_item_plannedMealId` ON `planned_meal_item` (`plannedMealId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_planned_meal_item_foodItemId` ON `planned_meal_item` (`foodItemId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_planned_meal_item_recipeId` ON `planned_meal_item` (`recipeId`)")
+    }
+}

@@ -1,7 +1,12 @@
 package com.brunoapp.fittrack.data.database.seed
 
+import com.brunoapp.fittrack.data.database.dao.DietDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.FoodDao
+import com.brunoapp.fittrack.data.database.entity.DietPlanDayEntity
+import com.brunoapp.fittrack.data.database.entity.DietPlanEntity
+import com.brunoapp.fittrack.data.database.entity.PlannedMealEntity
+import com.brunoapp.fittrack.data.database.entity.PlannedMealItemEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeIngredientEntity
 import java.time.Instant
@@ -15,7 +20,8 @@ import javax.inject.Singleton
 @Singleton
 class DatabaseSeeder @Inject constructor(
     private val exerciseDao: ExerciseDao,
-    private val foodDao: FoodDao
+    private val foodDao: FoodDao,
+    private val dietDao: DietDao
 ) {
     suspend fun seedIfNeeded() {
         if (exerciseDao.count() == 0) {
@@ -26,6 +32,65 @@ class DatabaseSeeder @Inject constructor(
         }
         if (foodDao.countRecipes() == 0) {
             seedRecipes()
+        }
+        if (dietDao.countPlans() == 0) {
+            seedDietPlan()
+        }
+    }
+
+    private suspend fun seedDietPlan() {
+        val foodIdByName = foodDao.getAllFoodsOnce().associate { it.name to it.id }
+        val recipeIdByName = foodDao.getAllRecipesOnce().associate { it.name to it.id }
+
+        val planId = dietDao.insertPlan(
+            DietPlanEntity(
+                name = DietPlanSeed.PLAN_NAME,
+                description = DietPlanSeed.PLAN_DESCRIPTION,
+                isActive = true,
+                createdAt = Instant.now().toString()
+            )
+        )
+
+        DietPlanSeed.days().forEach { seedDay ->
+            val dayId = dietDao.insertDay(
+                DietPlanDayEntity(
+                    dietPlanId = planId,
+                    dayOfWeek = seedDay.dayOfWeek,
+                    isTrainingDay = seedDay.isTraining
+                )
+            )
+            seedDay.meals.forEachIndexed { order, seedMeal ->
+                val mealId = dietDao.insertMeal(
+                    PlannedMealEntity(
+                        dietPlanDayId = dayId,
+                        name = seedMeal.name,
+                        mealOrder = order
+                    )
+                )
+                seedMeal.items.forEach { item ->
+                    if (item.isRecipe) {
+                        recipeIdByName[item.name]?.let { recipeId ->
+                            dietDao.insertItem(
+                                PlannedMealItemEntity(
+                                    plannedMealId = mealId,
+                                    recipeId = recipeId,
+                                    quantity = item.quantity
+                                )
+                            )
+                        }
+                    } else {
+                        foodIdByName[item.name]?.let { foodId ->
+                            dietDao.insertItem(
+                                PlannedMealItemEntity(
+                                    plannedMealId = mealId,
+                                    foodItemId = foodId,
+                                    quantity = item.quantity
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 

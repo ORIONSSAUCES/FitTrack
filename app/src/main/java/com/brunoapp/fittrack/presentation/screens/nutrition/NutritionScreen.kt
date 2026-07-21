@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.presentation.components.PlaceholderScreen
 import com.brunoapp.fittrack.presentation.screens.nutrition.food.FoodLibraryScreen
+import com.brunoapp.fittrack.presentation.screens.nutrition.plan.DietPlanScreen
 
 @Composable
 fun NutritionScreen(
@@ -48,7 +49,7 @@ fun NutritionScreen(
 
         when (selectedTab) {
             0 -> PlaceholderScreen(title = stringResource(R.string.nutrition_tab_today))
-            1 -> PlaceholderScreen(title = stringResource(R.string.nutrition_tab_plan))
+            1 -> DietPlanScreen()
             2 -> FoodLibraryScreen(
                 onFoodClick = onFoodClick,
                 onCreateFood = onCreateFood,
