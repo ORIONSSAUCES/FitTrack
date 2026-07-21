@@ -4,7 +4,9 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(
     tableName = "daily_log",
     foreignKeys = [
@@ -26,6 +28,7 @@ data class DailyLogEntity(
     val notes: String = ""
 )
 
+@Serializable
 @Entity(
     tableName = "daily_meal",
     foreignKeys = [
@@ -46,6 +49,7 @@ data class DailyMealEntity(
     val isCompleted: Boolean = false
 )
 
+@Serializable
 @Entity(
     tableName = "daily_food_entry",
     foreignKeys = [

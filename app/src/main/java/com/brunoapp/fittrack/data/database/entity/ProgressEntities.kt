@@ -3,7 +3,9 @@ package com.brunoapp.fittrack.data.database.entity
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "weight_entry", indices = [Index("date")])
 data class WeightEntryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -13,6 +15,7 @@ data class WeightEntryEntity(
     val notes: String = ""
 )
 
+@Serializable
 @Entity(tableName = "body_measurement", indices = [Index("date")])
 data class BodyMeasurementEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -30,6 +33,7 @@ data class BodyMeasurementEntity(
     val notes: String = ""
 )
 
+@Serializable
 @Entity(tableName = "progress_photo", indices = [Index("date")])
 data class ProgressPhotoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

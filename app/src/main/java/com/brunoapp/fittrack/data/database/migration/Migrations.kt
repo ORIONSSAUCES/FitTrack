@@ -416,3 +416,12 @@ val MIGRATION_7_8 = object : Migration(7, 8) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_progress_photo_date` ON `progress_photo` (`date`)")
     }
 }
+
+/**
+ * v8 → v9: effectiveness tier for exercise ordering.
+ */
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `exercise` ADD COLUMN `effectivenessTier` INTEGER NOT NULL DEFAULT 3")
+    }
+}

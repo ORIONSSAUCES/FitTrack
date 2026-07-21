@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.brunoapp.fittrack.data.database.FitTrackDatabase
 import com.brunoapp.fittrack.data.database.dao.ActiveWorkoutStateDao
+import com.brunoapp.fittrack.data.database.dao.BackupDao
 import com.brunoapp.fittrack.data.database.dao.DailyLogDao
 import com.brunoapp.fittrack.data.database.dao.DietDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
@@ -20,6 +21,7 @@ import com.brunoapp.fittrack.data.database.migration.MIGRATION_4_5
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_5_6
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_6_7
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_7_8
+import com.brunoapp.fittrack.data.database.migration.MIGRATION_8_9
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,7 +41,7 @@ object DatabaseModule {
             FitTrackDatabase::class.java,
             FitTrackDatabase.DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
             .build()
 
     @Provides
@@ -73,4 +75,7 @@ object DatabaseModule {
 
     @Provides
     fun provideProgressDao(db: FitTrackDatabase): ProgressDao = db.progressDao()
+
+    @Provides
+    fun provideBackupDao(db: FitTrackDatabase): BackupDao = db.backupDao()
 }

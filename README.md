@@ -133,8 +133,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 9 — Peso, medidas y fotos + 475 ejercicios con imagen
 
+- [x] Módulo 10 — Backup: exportar/importar JSON, CSV de pesos y entrenamientos + catálogo en español con ranking
+
 ### En desarrollo
-- [ ] Módulo 10 — Backup y recordatorios
 - [ ] Módulo 11 — Datos de demostración
 - [ ] Módulo 12 — Pulido final
 

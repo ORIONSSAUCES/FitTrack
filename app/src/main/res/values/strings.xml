@@ -206,4 +206,25 @@
     <string name="photo_weight_optional">Peso del día (opcional)</string>
     <string name="photo_delete_title">¿Eliminar fotos?</string>
     <string name="photo_delete_message">Se eliminarán las fotos de este registro del dispositivo. Esta acción no se puede deshacer.</string>
+
+    <!-- Effectiveness tiers -->
+    <string name="exercise_effectiveness">Efectividad</string>
+    <string name="tier_1">★★★ Muy efectivo</string>
+    <string name="tier_2">★★ Efectivo</string>
+    <string name="tier_3">★ Complementario</string>
+
+    <!-- Backup -->
+    <string name="backup_section_title">Copia de seguridad</string>
+    <string name="backup_section_hint">Exporta todos tus datos a un archivo JSON. Puedes guardarlo en Google Drive desde el selector. Las fotos de progreso no se incluyen en el archivo.</string>
+    <string name="backup_export">Exportar copia de seguridad</string>
+    <string name="backup_import">Importar copia de seguridad</string>
+    <string name="backup_csv_weights">Exportar pesos (CSV)</string>
+    <string name="backup_csv_workouts">Exportar entrenamientos (CSV)</string>
+    <string name="backup_export_ok">Copia exportada correctamente</string>
+    <string name="backup_import_ok">Datos restaurados correctamente</string>
+    <string name="backup_csv_ok">CSV exportado correctamente</string>
+    <string name="backup_failed">Error</string>
+    <string name="backup_import_title">¿Restaurar copia?</string>
+    <string name="backup_import_warning">Se reemplazarán TODOS los datos actuales por los del archivo. Esta acción no se puede deshacer. ¿Continuar?</string>
+    <string name="backup_import_confirm">Reemplazar todo</string>
 </resources>

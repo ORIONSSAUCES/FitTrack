@@ -2,7 +2,9 @@ package com.brunoapp.fittrack.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -15,5 +17,6 @@ data class ExerciseEntity(
     val isCustom: Boolean = false,
     val isFavorite: Boolean = false,
     val imagePath: String? = null,   // bundled asset path, e.g. "exercises/0025_x.jpg"
+    val effectivenessTier: Int = 3,  // 1 = most effective, 3 = complementary
     val createdAt: String = ""
 )

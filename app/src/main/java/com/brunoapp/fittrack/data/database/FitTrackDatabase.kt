@@ -3,6 +3,7 @@ package com.brunoapp.fittrack.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.brunoapp.fittrack.data.database.dao.ActiveWorkoutStateDao
+import com.brunoapp.fittrack.data.database.dao.BackupDao
 import com.brunoapp.fittrack.data.database.dao.DailyLogDao
 import com.brunoapp.fittrack.data.database.dao.DietDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
@@ -52,6 +53,7 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
  *  6 — + diet_plan, diet_plan_day, planned_meal, planned_meal_item
  *  7 — + daily_log, daily_meal, daily_food_entry
  *  8 — + exercise.imagePath, weight_entry, body_measurement, progress_photo
+ *  9 — + exercise.effectivenessTier
  */
 @Database(
     entities = [
@@ -79,7 +81,7 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
         BodyMeasurementEntity::class,
         ProgressPhotoEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = true
 )
 abstract class FitTrackDatabase : RoomDatabase() {
@@ -93,6 +95,7 @@ abstract class FitTrackDatabase : RoomDatabase() {
     abstract fun dietDao(): DietDao
     abstract fun dailyLogDao(): DailyLogDao
     abstract fun progressDao(): ProgressDao
+    abstract fun backupDao(): BackupDao
 
     companion object {
         const val DATABASE_NAME = "fittrack.db"

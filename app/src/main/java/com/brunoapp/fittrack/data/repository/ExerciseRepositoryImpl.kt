@@ -37,6 +37,7 @@ class ExerciseRepositoryImpl @Inject constructor(
                 isCustom = exercise.isCustom,
                 isFavorite = exercise.isFavorite,
                 imagePath = exercise.imagePath ?: existing?.imagePath,
+                effectivenessTier = exercise.effectivenessTier,
                 createdAt = existing?.createdAt ?: Instant.now().toString()
             )
         )
@@ -67,7 +68,8 @@ class ExerciseRepositoryImpl @Inject constructor(
             personalNotes = personalNotes,
             isCustom = isCustom,
             isFavorite = isFavorite,
-            imagePath = imagePath
+            imagePath = imagePath,
+            effectivenessTier = effectivenessTier
         )
     }
 }

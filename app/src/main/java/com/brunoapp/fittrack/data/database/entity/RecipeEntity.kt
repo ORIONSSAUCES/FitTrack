@@ -4,7 +4,9 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "recipe")
 data class RecipeEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -14,6 +16,7 @@ data class RecipeEntity(
     val createdAt: String = ""
 )
 
+@Serializable
 @Entity(
     tableName = "recipe_ingredient",
     foreignKeys = [

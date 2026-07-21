@@ -139,6 +139,14 @@ fun ExerciseDetailScreen(
                     label = stringResource(R.string.exercise_equipment),
                     value = current.equipment.displayName
                 )
+                InfoRow(
+                    label = stringResource(R.string.exercise_effectiveness),
+                    value = when (current.effectivenessTier) {
+                        1 -> stringResource(R.string.tier_1)
+                        2 -> stringResource(R.string.tier_2)
+                        else -> stringResource(R.string.tier_3)
+                    }
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))

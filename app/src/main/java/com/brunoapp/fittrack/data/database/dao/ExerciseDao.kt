@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExerciseDao {
 
-    @Query("SELECT * FROM exercise ORDER BY name COLLATE NOCASE")
+    @Query("SELECT * FROM exercise ORDER BY effectivenessTier, name COLLATE NOCASE")
     fun observeAll(): Flow<List<ExerciseEntity>>
 
     @Query("SELECT * FROM exercise WHERE id = :id")
@@ -42,6 +42,9 @@ interface ExerciseDao {
 
     @Query("UPDATE exercise SET imagePath = :imagePath WHERE name = :name AND imagePath IS NULL")
     suspend fun setImageByName(name: String, imagePath: String)
+
+    @Query("UPDATE exercise SET effectivenessTier = :tier WHERE name = :name")
+    suspend fun setTierByName(name: String, tier: Int)
 
     @Query("SELECT COUNT(*) FROM exercise WHERE imagePath IS NOT NULL AND isCustom = 0")
     suspend fun countWithImages(): Int

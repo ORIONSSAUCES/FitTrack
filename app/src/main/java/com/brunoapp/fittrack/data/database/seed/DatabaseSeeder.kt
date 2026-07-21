@@ -31,6 +31,10 @@ class DatabaseSeeder @Inject constructor(
         ExerciseImageMap.byExerciseName.forEach { (name, imagePath) ->
             exerciseDao.setImageByName(name, imagePath)
         }
+        // Assign effectiveness tiers (idempotent)
+        ExerciseTierMap.byExerciseName.forEach { (name, tier) ->
+            exerciseDao.setTierByName(name, tier)
+        }
         // Import the extended English catalog once
         if (exerciseDao.countWithImages() < ExerciseImageCatalog.all().size) {
             val existingNames = exerciseDao.getAllNamesOnce().toSet()

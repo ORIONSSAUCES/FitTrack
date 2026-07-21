@@ -166,7 +166,8 @@ private fun ExerciseCard(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${exercise.muscleGroup.displayName} · ${exercise.equipment.displayName}" +
+                    text = tierLabel(exercise.effectivenessTier) +
+                        "${exercise.muscleGroup.displayName} · ${exercise.equipment.displayName}" +
                         if (exercise.isCustom) " · Personalizado" else "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -183,4 +184,11 @@ private fun ExerciseCard(
             }
         }
     }
+}
+
+
+private fun tierLabel(tier: Int): String = when (tier) {
+    1 -> "★★★ "
+    2 -> "★★ "
+    else -> "★ "
 }

@@ -13,5 +13,6 @@ data class Exercise(
     val personalNotes: String = "",
     val isCustom: Boolean = false,
     val isFavorite: Boolean = false,
-    val imagePath: String? = null
+    val imagePath: String? = null,
+    val effectivenessTier: Int = 3
 )

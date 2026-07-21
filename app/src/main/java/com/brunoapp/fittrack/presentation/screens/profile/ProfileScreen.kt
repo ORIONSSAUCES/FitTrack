@@ -217,6 +217,8 @@ fun ProfileScreen(
                 }
             }
 
+            BackupSection(snackbarHostState = snackbarHostState)
+
             Button(
                 onClick = viewModel::onSaveClick,
                 modifier = Modifier

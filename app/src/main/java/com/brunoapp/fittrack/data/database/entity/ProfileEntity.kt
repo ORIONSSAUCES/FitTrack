@@ -2,11 +2,13 @@ package com.brunoapp.fittrack.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 /**
  * Single-row table holding the user profile.
  * Always stored with id = 1.
  */
+@Serializable
 @Entity(tableName = "profile")
 data class ProfileEntity(
     @PrimaryKey val id: Int = 1,

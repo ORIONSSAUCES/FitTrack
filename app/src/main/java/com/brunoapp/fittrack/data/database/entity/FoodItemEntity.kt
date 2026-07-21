@@ -2,11 +2,13 @@ package com.brunoapp.fittrack.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 /**
  * A food with macros per 100 g (or 100 ml for liquids).
  * [servingSize] is the usual portion in [servingUnit] used to prefill quantities.
  */
+@Serializable
 @Entity(tableName = "food_item")
 data class FoodItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

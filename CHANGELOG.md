@@ -3,6 +3,20 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.12.0] - Sin publicar
+
+### Agregado
+- Catálogo de ejercicios en español con ranking de efectividad:
+  - Los 416 ejercicios del catálogo extendido traducidos al español
+  - Ranking de 3 niveles según evidencia de hipertrofia: ★★★ Muy efectivo · ★★ Efectivo · ★ Complementario
+  - La biblioteca se ordena por efectividad y muestra las estrellas en cada tarjeta
+  - Migración de base de datos v8 → v9
+- Módulo 10 — Copia de seguridad:
+  - Exportar TODOS los datos a JSON (guardable en Google Drive desde el selector)
+  - Importar/restaurar con confirmación (reemplaza los datos actuales)
+  - Exportar pesos y entrenamientos a CSV
+  - 5 pruebas unitarias de generación CSV
+
 ## [0.11.0] - Sin publicar
 
 ### Agregado
