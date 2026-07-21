@@ -28,6 +28,10 @@ interface DietDao {
     fun observeActivePlan(): Flow<PlanWithDays?>
 
     @Transaction
+    @Query("SELECT * FROM diet_plan WHERE isActive = 1 LIMIT 1")
+    suspend fun getActivePlanOnce(): PlanWithDays?
+
+    @Transaction
     @Query("SELECT * FROM diet_plan WHERE id = :id")
     suspend fun getPlan(id: Long): PlanWithDays?
 

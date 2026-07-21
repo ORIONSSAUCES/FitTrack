@@ -129,8 +129,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 7 — Plan de dieta: menú semanal real precargado, objetivos entreno/descanso, macros vs objetivo por día
 
+- [x] Módulo 8 — Registro diario: día desde el plan, comidas completadas, macros consumidos, adherencia y cumplimiento
+
 ### En desarrollo
-- [ ] Módulo 8 — Registro diario de comidas
 - [ ] Módulo 9 — Peso, medidas y fotos
 - [ ] Módulo 10 — Backup y recordatorios
 - [ ] Módulo 11 — Datos de demostración

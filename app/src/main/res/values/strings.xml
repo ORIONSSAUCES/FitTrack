@@ -171,4 +171,14 @@
     <string name="diet_add_meal">Agregar comida</string>
     <string name="diet_meal_name">Nombre de la comida</string>
     <string name="diet_add_item">Agregar alimento o receta</string>
+
+    <!-- Daily log -->
+    <string name="daily_not_started">Todavía no registraste el día de hoy</string>
+    <string name="daily_start_from_plan">Cargar desde mi plan</string>
+    <string name="daily_start_empty">Empezar día vacío</string>
+    <string name="daily_start_error">No hay plan activo para hoy. Crea uno en la pestaña Plan o empieza vacío.</string>
+    <string name="daily_consumed_vs_goal">Consumido hoy vs objetivo</string>
+    <string name="daily_compliance_today">Hoy: %1$d%%</string>
+    <string name="daily_compliance_week">Semana: %1$d%%</string>
+    <string name="daily_adherence">¿Seguiste el plan hoy?</string>
 </resources>

@@ -311,3 +311,62 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_planned_meal_item_recipeId` ON `planned_meal_item` (`recipeId`)")
     }
 }
+
+/**
+ * v6 → v7: adds daily nutrition logs.
+ */
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `daily_log` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `date` TEXT NOT NULL,
+                `dietPlanId` INTEGER,
+                `isTrainingDay` INTEGER NOT NULL,
+                `adherence` TEXT NOT NULL,
+                `notes` TEXT NOT NULL,
+                FOREIGN KEY(`dietPlanId`) REFERENCES `diet_plan`(`id`)
+                    ON UPDATE NO ACTION ON DELETE SET NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_daily_log_date` ON `daily_log` (`date`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_log_dietPlanId` ON `daily_log` (`dietPlanId`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `daily_meal` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `dailyLogId` INTEGER NOT NULL,
+                `name` TEXT NOT NULL,
+                `mealOrder` INTEGER NOT NULL,
+                `isCompleted` INTEGER NOT NULL,
+                FOREIGN KEY(`dailyLogId`) REFERENCES `daily_log`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_meal_dailyLogId` ON `daily_meal` (`dailyLogId`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `daily_food_entry` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `dailyMealId` INTEGER NOT NULL,
+                `foodItemId` INTEGER,
+                `recipeId` INTEGER,
+                `quantity` REAL NOT NULL,
+                `loggedAt` TEXT NOT NULL,
+                FOREIGN KEY(`dailyMealId`) REFERENCES `daily_meal`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`foodItemId`) REFERENCES `food_item`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`recipeId`) REFERENCES `recipe`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_food_entry_dailyMealId` ON `daily_food_entry` (`dailyMealId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_food_entry_foodItemId` ON `daily_food_entry` (`foodItemId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_food_entry_recipeId` ON `daily_food_entry` (`recipeId`)")
+    }
+}

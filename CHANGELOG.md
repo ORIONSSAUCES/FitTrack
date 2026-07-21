@@ -3,6 +3,20 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.10.0] - Sin publicar
+
+### Agregado
+- Módulo 8 — Registro diario de comidas:
+  - Iniciar el día copiando las comidas del plan activo (o empezar vacío)
+  - Marcar comidas como completadas con checkbox (tarjeta se ilumina)
+  - Editar cantidades realmente consumidas, agregar/quitar alimentos y recetas
+  - Resumen "Consumido hoy vs objetivo" con barras de macros
+  - Toggle día de entrenamiento/descanso (cambia los objetivos)
+  - Adherencia del día: completo / parcial / no seguido
+  - Cumplimiento de hoy (%) y promedio semanal (%)
+  - Migración de base de datos v6 → v7
+  - 5 pruebas unitarias de cumplimiento
+
 ## [0.9.0] - Sin publicar
 
 ### Agregado

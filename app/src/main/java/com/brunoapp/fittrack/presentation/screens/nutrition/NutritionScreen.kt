@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.brunoapp.fittrack.R
-import com.brunoapp.fittrack.presentation.components.PlaceholderScreen
+import com.brunoapp.fittrack.presentation.screens.nutrition.daily.DailyLogScreen
 import com.brunoapp.fittrack.presentation.screens.nutrition.food.FoodLibraryScreen
 import com.brunoapp.fittrack.presentation.screens.nutrition.plan.DietPlanScreen
 
@@ -48,7 +48,7 @@ fun NutritionScreen(
         }
 
         when (selectedTab) {
-            0 -> PlaceholderScreen(title = stringResource(R.string.nutrition_tab_today))
+            0 -> DailyLogScreen()
             1 -> DietPlanScreen()
             2 -> FoodLibraryScreen(
                 onFoodClick = onFoodClick,
