@@ -12,5 +12,6 @@ data class Exercise(
     val instructions: String = "",
     val personalNotes: String = "",
     val isCustom: Boolean = false,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val imagePath: String? = null
 )

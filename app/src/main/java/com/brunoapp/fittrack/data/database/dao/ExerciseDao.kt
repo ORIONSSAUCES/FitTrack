@@ -22,6 +22,9 @@ interface ExerciseDao {
     @Query("SELECT COUNT(*) FROM exercise")
     suspend fun count(): Int
 
+    @Query("SELECT name FROM exercise")
+    suspend fun getAllNamesOnce(): List<String>
+
     @Upsert
     suspend fun upsert(exercise: ExerciseEntity): Long
 
@@ -36,4 +39,10 @@ interface ExerciseDao {
 
     @Query("UPDATE exercise SET personalNotes = :notes WHERE id = :id")
     suspend fun updateNotes(id: Long, notes: String)
+
+    @Query("UPDATE exercise SET imagePath = :imagePath WHERE name = :name AND imagePath IS NULL")
+    suspend fun setImageByName(name: String, imagePath: String)
+
+    @Query("SELECT COUNT(*) FROM exercise WHERE imagePath IS NOT NULL AND isCustom = 0")
+    suspend fun countWithImages(): Int
 }

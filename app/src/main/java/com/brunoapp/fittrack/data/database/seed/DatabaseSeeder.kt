@@ -27,6 +27,16 @@ class DatabaseSeeder @Inject constructor(
         if (exerciseDao.count() == 0) {
             exerciseDao.upsertAll(ExerciseSeed.all())
         }
+        // Assign bundled images to the base Spanish exercises (idempotent)
+        ExerciseImageMap.byExerciseName.forEach { (name, imagePath) ->
+            exerciseDao.setImageByName(name, imagePath)
+        }
+        // Import the extended English catalog once
+        if (exerciseDao.countWithImages() < ExerciseImageCatalog.all().size) {
+            val existingNames = exerciseDao.getAllNamesOnce().toSet()
+            val newOnes = ExerciseImageCatalog.all().filter { it.name !in existingNames }
+            if (newOnes.isNotEmpty()) exerciseDao.upsertAll(newOnes)
+        }
         if (foodDao.countFoods() == 0) {
             foodDao.upsertFoods(FoodSeed.all())
         }

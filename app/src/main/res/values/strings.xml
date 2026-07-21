@@ -181,4 +181,29 @@
     <string name="daily_compliance_today">Hoy: %1$d%%</string>
     <string name="daily_compliance_week">Semana: %1$d%%</string>
     <string name="daily_adherence">¿Seguiste el plan hoy?</string>
+
+    <!-- Progress -->
+    <string name="progress_tab_weight">Peso</string>
+    <string name="progress_tab_measurements">Medidas</string>
+    <string name="progress_tab_photos">Fotos</string>
+    <string name="weight_current">Actual (kg)</string>
+    <string name="weight_week_avg">Promedio 7d</string>
+    <string name="weight_total_change">Cambio total</string>
+    <string name="weight_vs_prev_week">%1$s kg vs semana anterior</string>
+    <string name="weight_chart_title">Evolución del peso</string>
+    <string name="weight_add">Registrar peso</string>
+    <string name="weight_kg">Peso (kg)</string>
+    <string name="weight_notes_hint">Nota (ej: en ayunas)</string>
+    <string name="measurement_add">Registrar medidas</string>
+    <string name="measurement_empty">Sin medidas registradas</string>
+    <string name="measurement_error">Ingresa al menos una medida válida</string>
+    <string name="photo_add">Agregar fotos de progreso</string>
+    <string name="photo_empty">Sin fotos de progreso</string>
+    <string name="photo_privacy_note">Las fotos se guardan solo en este dispositivo</string>
+    <string name="photo_front">Frontal</string>
+    <string name="photo_side">Lateral</string>
+    <string name="photo_back">Posterior</string>
+    <string name="photo_weight_optional">Peso del día (opcional)</string>
+    <string name="photo_delete_title">¿Eliminar fotos?</string>
+    <string name="photo_delete_message">Se eliminarán las fotos de este registro del dispositivo. Esta acción no se puede deshacer.</string>
 </resources>

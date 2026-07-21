@@ -370,3 +370,49 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_daily_food_entry_recipeId` ON `daily_food_entry` (`recipeId`)")
     }
 }
+
+/**
+ * v7 → v8: exercise images + weight, measurements and progress photos.
+ */
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `exercise` ADD COLUMN `imagePath` TEXT")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `weight_entry` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `date` TEXT NOT NULL,
+                `time` TEXT NOT NULL,
+                `weightKg` REAL NOT NULL,
+                `notes` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_weight_entry_date` ON `weight_entry` (`date`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `body_measurement` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `date` TEXT NOT NULL,
+                `waistCm` REAL, `abdomenCm` REAL, `chestCm` REAL, `hipsCm` REAL,
+                `neckCm` REAL, `leftArmCm` REAL, `rightArmCm` REAL,
+                `leftThighCm` REAL, `rightThighCm` REAL, `bodyFatPct` REAL,
+                `notes` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_body_measurement_date` ON `body_measurement` (`date`)")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `progress_photo` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `date` TEXT NOT NULL,
+                `weightKg` REAL,
+                `frontPhotoPath` TEXT, `sidePhotoPath` TEXT, `backPhotoPath` TEXT,
+                `notes` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_progress_photo_date` ON `progress_photo` (`date`)")
+    }
+}

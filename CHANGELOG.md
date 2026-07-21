@@ -3,6 +3,24 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.11.0] - Sin publicar
+
+### Agregado
+- Imágenes de ejercicios:
+  - 473 imágenes integradas en la app (13 MB, funcionan sin internet)
+  - Los 57 ejercicios base ahora muestran su imagen demostrativa
+  - +416 ejercicios nuevos del catálogo extendido (nombres en inglés) con imagen,
+    grupo muscular y equipamiento detectados automáticamente
+- Módulo 9 — Peso, medidas y fotos:
+  - Registro de peso con fecha/hora y notas (ej: "en ayunas")
+  - Tarjetas: peso actual, promedio 7 días, cambio total, comparación vs semana anterior
+  - Gráfico de evolución del peso
+  - Medidas corporales: cintura, abdomen, pecho, cadera, cuello, brazos, muslos y % grasa
+  - Fotos de progreso: frontal/lateral/posterior desde el selector del sistema,
+    copiadas a almacenamiento privado (nunca salen del dispositivo)
+  - Eliminación con confirmación en los tres registros
+  - Migración de base de datos v7 → v8
+
 ## [0.10.0] - Sin publicar
 
 ### Agregado

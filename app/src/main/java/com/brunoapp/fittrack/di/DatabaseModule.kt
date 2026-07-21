@@ -10,6 +10,7 @@ import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.FoodDao
 import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
 import com.brunoapp.fittrack.data.database.dao.ProfileDao
+import com.brunoapp.fittrack.data.database.dao.ProgressDao
 import com.brunoapp.fittrack.data.database.dao.RoutineDao
 import com.brunoapp.fittrack.data.database.dao.WorkoutDao
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_1_2
@@ -18,6 +19,7 @@ import com.brunoapp.fittrack.data.database.migration.MIGRATION_3_4
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_4_5
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_5_6
 import com.brunoapp.fittrack.data.database.migration.MIGRATION_6_7
+import com.brunoapp.fittrack.data.database.migration.MIGRATION_7_8
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +39,7 @@ object DatabaseModule {
             FitTrackDatabase::class.java,
             FitTrackDatabase.DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
             .build()
 
     @Provides
@@ -68,4 +70,7 @@ object DatabaseModule {
 
     @Provides
     fun provideDailyLogDao(db: FitTrackDatabase): DailyLogDao = db.dailyLogDao()
+
+    @Provides
+    fun provideProgressDao(db: FitTrackDatabase): ProgressDao = db.progressDao()
 }

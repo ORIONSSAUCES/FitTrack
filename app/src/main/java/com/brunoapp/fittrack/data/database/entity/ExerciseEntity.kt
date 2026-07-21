@@ -14,5 +14,6 @@ data class ExerciseEntity(
     val personalNotes: String = "",
     val isCustom: Boolean = false,
     val isFavorite: Boolean = false,
+    val imagePath: String? = null,   // bundled asset path, e.g. "exercises/0025_x.jpg"
     val createdAt: String = ""
 )

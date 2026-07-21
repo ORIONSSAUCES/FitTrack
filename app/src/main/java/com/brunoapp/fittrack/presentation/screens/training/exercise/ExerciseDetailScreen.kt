@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.utils.DateUtils
+import com.brunoapp.fittrack.presentation.components.AssetImage
 import com.brunoapp.fittrack.presentation.components.SimpleLineChart
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
@@ -110,6 +111,18 @@ fun ExerciseDetailScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
+            // Exercise image
+            current.imagePath?.let { imagePath ->
+                AssetImage(
+                    assetPath = imagePath,
+                    contentDescription = current.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
             // Muscles + equipment
             InfoCard(title = stringResource(R.string.exercise_info)) {
                 InfoRow(

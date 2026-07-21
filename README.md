@@ -131,8 +131,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 8 — Registro diario: día desde el plan, comidas completadas, macros consumidos, adherencia y cumplimiento
 
+- [x] Módulo 9 — Peso, medidas y fotos + 475 ejercicios con imagen
+
 ### En desarrollo
-- [ ] Módulo 9 — Peso, medidas y fotos
 - [ ] Módulo 10 — Backup y recordatorios
 - [ ] Módulo 11 — Datos de demostración
 - [ ] Módulo 12 — Pulido final
