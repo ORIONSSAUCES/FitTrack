@@ -4,14 +4,18 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.brunoapp.fittrack.data.database.dao.ActiveWorkoutStateDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
+import com.brunoapp.fittrack.data.database.dao.FoodDao
 import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
 import com.brunoapp.fittrack.data.database.dao.ProfileDao
 import com.brunoapp.fittrack.data.database.dao.RoutineDao
 import com.brunoapp.fittrack.data.database.dao.WorkoutDao
 import com.brunoapp.fittrack.data.database.entity.ActiveWorkoutStateEntity
 import com.brunoapp.fittrack.data.database.entity.ExerciseEntity
+import com.brunoapp.fittrack.data.database.entity.FoodItemEntity
 import com.brunoapp.fittrack.data.database.entity.PersonalRecordEntity
 import com.brunoapp.fittrack.data.database.entity.ProfileEntity
+import com.brunoapp.fittrack.data.database.entity.RecipeEntity
+import com.brunoapp.fittrack.data.database.entity.RecipeIngredientEntity
 import com.brunoapp.fittrack.data.database.entity.RoutineEntity
 import com.brunoapp.fittrack.data.database.entity.RoutineExerciseEntity
 import com.brunoapp.fittrack.data.database.entity.RoutineSetTemplateEntity
@@ -31,6 +35,7 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
  *  2 — + exercise, personal_record
  *  3 — + routine, routine_exercise, routine_set_template
  *  4 — + workout_session, workout_exercise, workout_set, active_workout_state
+ *  5 — + food_item, recipe, recipe_ingredient
  */
 @Database(
     entities = [
@@ -43,9 +48,12 @@ import com.brunoapp.fittrack.data.database.entity.WorkoutSetEntity
         WorkoutSessionEntity::class,
         WorkoutExerciseEntity::class,
         WorkoutSetEntity::class,
-        ActiveWorkoutStateEntity::class
+        ActiveWorkoutStateEntity::class,
+        FoodItemEntity::class,
+        RecipeEntity::class,
+        RecipeIngredientEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class FitTrackDatabase : RoomDatabase() {
@@ -55,6 +63,7 @@ abstract class FitTrackDatabase : RoomDatabase() {
     abstract fun routineDao(): RoutineDao
     abstract fun workoutDao(): WorkoutDao
     abstract fun activeWorkoutStateDao(): ActiveWorkoutStateDao
+    abstract fun foodDao(): FoodDao
 
     companion object {
         const val DATABASE_NAME = "fittrack.db"

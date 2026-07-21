@@ -3,6 +3,19 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [0.8.0] - Sin publicar
+
+### Agregado
+- Módulo 6 — Alimentos y recetas:
+  - 20 alimentos precargados con los macros de la dieta real (pollo, avena, arroz, porotos, lentejas, atún, sardinas, mayonesa light Hellmann's, yogur proteico Trébol, proteína, creatina, etc.)
+  - Notas de pesaje en cada alimento (crudo/cocido/escurrido)
+  - 4 recetas de desayuno precargadas: waffles de banana, waffles de cacao, avena overnight y postre de huevo y cacao
+  - Crear, editar y eliminar alimentos con macros por 100 g/ml y porción habitual
+  - Recetas con ingredientes y totales de macros calculados en vivo
+  - Búsqueda y favoritos
+  - Migración de base de datos v4 → v5
+  - 6 pruebas unitarias de cálculos nutricionales
+
 ## [0.5.0] - Sin publicar
 
 ### Agregado

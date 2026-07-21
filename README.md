@@ -125,8 +125,9 @@ app/src/main/java/com/brunoapp/fittrack/
 
 - [x] Módulo 5 — Historial y estadísticas: sesiones, frecuencia, detalle con notas, progresión con gráfico
 
+- [x] Módulo 6 — Alimentos y recetas: 20 alimentos de la dieta precargados, 4 recetas, macros en vivo
+
 ### En desarrollo
-- [ ] Módulo 6 — Alimentos y recetas
 - [ ] Módulo 7 — Plan de dieta
 - [ ] Módulo 8 — Registro diario de comidas
 - [ ] Módulo 9 — Peso, medidas y fotos

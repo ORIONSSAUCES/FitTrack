@@ -178,3 +178,58 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
         )
     }
 }
+
+/**
+ * v4 → v5: adds food library and recipes.
+ */
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `food_item` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `name` TEXT NOT NULL,
+                `brand` TEXT NOT NULL,
+                `caloriesPer100` REAL NOT NULL,
+                `proteinPer100` REAL NOT NULL,
+                `carbsPer100` REAL NOT NULL,
+                `fatPer100` REAL NOT NULL,
+                `fiberPer100` REAL NOT NULL,
+                `servingSize` REAL NOT NULL,
+                `servingUnit` TEXT NOT NULL,
+                `notes` TEXT NOT NULL,
+                `isCustom` INTEGER NOT NULL,
+                `isFavorite` INTEGER NOT NULL,
+                `lastUsed` TEXT
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `recipe` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `name` TEXT NOT NULL,
+                `description` TEXT NOT NULL,
+                `servings` INTEGER NOT NULL,
+                `createdAt` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `recipe_ingredient` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `recipeId` INTEGER NOT NULL,
+                `foodItemId` INTEGER NOT NULL,
+                `quantity` REAL NOT NULL,
+                FOREIGN KEY(`recipeId`) REFERENCES `recipe`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE,
+                FOREIGN KEY(`foodItemId`) REFERENCES `food_item`(`id`)
+                    ON UPDATE NO ACTION ON DELETE CASCADE
+            )
+            """.trimIndent()
+        )
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_recipe_ingredient_recipeId` ON `recipe_ingredient` (`recipeId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_recipe_ingredient_foodItemId` ON `recipe_ingredient` (`foodItemId`)")
+    }
+}

@@ -21,6 +21,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.brunoapp.fittrack.presentation.screens.home.HomeScreen
 import com.brunoapp.fittrack.presentation.screens.nutrition.NutritionScreen
+import com.brunoapp.fittrack.presentation.screens.nutrition.food.FoodEditScreen
+import com.brunoapp.fittrack.presentation.screens.nutrition.food.RecipeEditScreen
 import com.brunoapp.fittrack.presentation.screens.profile.ProfileScreen
 import com.brunoapp.fittrack.presentation.screens.progress.ProgressScreen
 import com.brunoapp.fittrack.presentation.screens.training.TrainingScreen
@@ -163,7 +165,38 @@ fun FitTrackApp() {
                 ActiveWorkoutScreen(onExit = { navController.popBackStack() })
             }
 
-            composable(Screen.Nutrition.route) { NutritionScreen() }
+            composable(Screen.Nutrition.route) {
+                NutritionScreen(
+                    onFoodClick = { id -> navController.navigate("food_edit?foodId=$id") },
+                    onCreateFood = { navController.navigate("food_edit") },
+                    onRecipeClick = { id -> navController.navigate("recipe_edit?recipeId=$id") },
+                    onCreateRecipe = { navController.navigate("recipe_edit") }
+                )
+            }
+
+            composable(
+                route = "food_edit?foodId={foodId}",
+                arguments = listOf(
+                    navArgument("foodId") {
+                        type = NavType.LongType
+                        defaultValue = -1L
+                    }
+                )
+            ) {
+                FoodEditScreen(onBack = { navController.popBackStack() })
+            }
+
+            composable(
+                route = "recipe_edit?recipeId={recipeId}",
+                arguments = listOf(
+                    navArgument("recipeId") {
+                        type = NavType.LongType
+                        defaultValue = -1L
+                    }
+                )
+            ) {
+                RecipeEditScreen(onBack = { navController.popBackStack() })
+            }
             composable(Screen.Progress.route) { ProgressScreen() }
             composable(Screen.Profile.route) { ProfileScreen() }
         }

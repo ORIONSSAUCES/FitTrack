@@ -119,4 +119,44 @@
     <string name="exercise_best_1rm">1RM estimado</string>
     <string name="exercise_progression">Progresión (1RM estimado)</string>
     <string name="exercise_recent_sets">Series recientes</string>
+
+    <!-- Nutrition tabs -->
+    <string name="nutrition_tab_today">Hoy</string>
+    <string name="nutrition_tab_plan">Plan</string>
+    <string name="nutrition_tab_foods">Alimentos</string>
+
+    <!-- Food library -->
+    <string name="food_section_foods">Alimentos</string>
+    <string name="food_section_recipes">Recetas</string>
+    <string name="food_search_hint">Buscar alimento…</string>
+    <string name="food_create">Nuevo alimento</string>
+    <string name="food_edit">Editar alimento</string>
+    <string name="food_name">Nombre</string>
+    <string name="food_brand">Marca (opcional)</string>
+    <string name="food_macros_per_100">Valores por 100 %1$s</string>
+    <string name="food_calories">Calorías (kcal)</string>
+    <string name="food_protein">Proteína (g)</string>
+    <string name="food_carbs">Carbohidratos (g)</string>
+    <string name="food_fat">Grasa (g)</string>
+    <string name="food_fiber">Fibra (g)</string>
+    <string name="food_serving">Porción habitual</string>
+    <string name="food_unit_grams">gramos</string>
+    <string name="food_unit_ml">mililitros</string>
+    <string name="food_notes">Notas (ej: pesar en crudo)</string>
+    <string name="food_numbers_error">Revisa los valores numéricos</string>
+    <string name="food_delete_title">¿Eliminar?</string>
+    <string name="food_delete_message">Se eliminará “%1$s”. Si está en recetas o comidas planificadas, también se quitará de ellas.</string>
+
+    <!-- Recipes -->
+    <string name="recipe_create">Nueva receta</string>
+    <string name="recipe_edit">Editar receta</string>
+    <string name="recipe_name">Nombre de la receta</string>
+    <string name="recipe_description">Preparación (opcional)</string>
+    <string name="recipe_servings">Porciones que rinde</string>
+    <string name="recipe_totals">Totales de la receta</string>
+    <string name="recipe_ingredients">Ingredientes</string>
+    <string name="recipe_add_ingredient">Agregar ingrediente</string>
+    <string name="recipe_pick_food">Elegir alimento</string>
+    <string name="recipe_ingredient_count">%1$d ingredientes</string>
+    <string name="recipe_delete_title">¿Eliminar receta?</string>
 </resources>
