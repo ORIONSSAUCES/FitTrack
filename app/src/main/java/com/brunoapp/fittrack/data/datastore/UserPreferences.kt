@@ -27,13 +27,17 @@ class UserPreferences(
         val TRAINING_REMINDER_HOUR = intPreferencesKey("training_reminder_hour")
         val TRAINING_REMINDER_MINUTE = intPreferencesKey("training_reminder_minute")
         val WEIGHT_REMINDER_ENABLED = booleanPreferencesKey("weight_reminder_enabled")
+        val WEIGHT_REMINDER_HOUR = intPreferencesKey("weight_reminder_hour")
+        val WEIGHT_REMINDER_MINUTE = intPreferencesKey("weight_reminder_minute")
     }
 
     data class ReminderSettings(
         val trainingEnabled: Boolean = false,
         val trainingHour: Int = 17,
         val trainingMinute: Int = 0,
-        val weightEnabled: Boolean = false
+        val weightEnabled: Boolean = false,
+        val weightHour: Int = 8,
+        val weightMinute: Int = 0
     )
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data.map { prefs ->
@@ -50,7 +54,9 @@ class UserPreferences(
             trainingEnabled = prefs[Keys.TRAINING_REMINDER_ENABLED] ?: false,
             trainingHour = prefs[Keys.TRAINING_REMINDER_HOUR] ?: 17,
             trainingMinute = prefs[Keys.TRAINING_REMINDER_MINUTE] ?: 0,
-            weightEnabled = prefs[Keys.WEIGHT_REMINDER_ENABLED] ?: false
+            weightEnabled = prefs[Keys.WEIGHT_REMINDER_ENABLED] ?: false,
+            weightHour = prefs[Keys.WEIGHT_REMINDER_HOUR] ?: 8,
+            weightMinute = prefs[Keys.WEIGHT_REMINDER_MINUTE] ?: 0
         )
     }
 
@@ -62,7 +68,11 @@ class UserPreferences(
         }
     }
 
-    suspend fun setWeightReminder(enabled: Boolean) {
-        context.dataStore.edit { it[Keys.WEIGHT_REMINDER_ENABLED] = enabled }
+    suspend fun setWeightReminder(enabled: Boolean, hour: Int, minute: Int) {
+        context.dataStore.edit {
+            it[Keys.WEIGHT_REMINDER_ENABLED] = enabled
+            it[Keys.WEIGHT_REMINDER_HOUR] = hour
+            it[Keys.WEIGHT_REMINDER_MINUTE] = minute
+        }
     }
 }

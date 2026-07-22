@@ -40,8 +40,8 @@ class WorkoutRepositoryImpl @Inject constructor(
             workoutDao.observeActiveSession(),
             exerciseDao.observeAll()
         ) { relation, exercises ->
-            val names = exercises.associate { it.id to it.name }
-            relation?.toDomain { id -> names[id].orEmpty() }
+            val info = exercises.associate { it.id to (it.name to it.imagePath) }
+            relation?.toDomain { id -> info[id] ?: ("" to null) }
         }
 
     override suspend fun hasActiveSession(): Boolean =
@@ -270,8 +270,8 @@ class WorkoutRepositoryImpl @Inject constructor(
             workoutDao.observeFinishedSessions(),
             exerciseDao.observeAll()
         ) { sessions, exercises ->
-            val names = exercises.associate { it.id to it.name }
-            sessions.map { relation -> relation.toDomain { id -> names[id].orEmpty() } }
+            val info = exercises.associate { it.id to (it.name to it.imagePath) }
+            sessions.map { relation -> relation.toDomain { id -> info[id] ?: ("" to null) } }
         }
 
     override fun observeSession(id: Long): Flow<WorkoutSession?> =
@@ -279,8 +279,8 @@ class WorkoutRepositoryImpl @Inject constructor(
             workoutDao.observeSession(id),
             exerciseDao.observeAll()
         ) { relation, exercises ->
-            val names = exercises.associate { it.id to it.name }
-            relation?.toDomain { exerciseId -> names[exerciseId].orEmpty() }
+            val info = exercises.associate { it.id to (it.name to it.imagePath) }
+            relation?.toDomain { exerciseId -> info[exerciseId] ?: ("" to null) }
         }
 
     override suspend fun deleteSession(id: Long) = workoutDao.deleteSession(id)
@@ -307,7 +307,7 @@ class WorkoutRepositoryImpl @Inject constructor(
         }
 
     private inline fun WorkoutSessionWithExercises.toDomain(
-        exerciseName: (Long) -> String
+        exerciseInfo: (Long) -> Pair<String, String?>
     ) = WorkoutSession(
         id = session.id,
         routineId = session.routineId,
@@ -320,10 +320,12 @@ class WorkoutRepositoryImpl @Inject constructor(
         exercises = exercises
             .sortedBy { it.workoutExercise.position }
             .map { relation ->
+                val (name, imagePath) = exerciseInfo(relation.workoutExercise.exerciseId)
                 WorkoutExercise(
                     id = relation.workoutExercise.id,
                     exerciseId = relation.workoutExercise.exerciseId,
-                    exerciseName = exerciseName(relation.workoutExercise.exerciseId),
+                    exerciseName = name,
+                    exerciseImagePath = imagePath,
                     position = relation.workoutExercise.position,
                     restSeconds = relation.workoutExercise.restSeconds,
                     notes = relation.workoutExercise.notes,

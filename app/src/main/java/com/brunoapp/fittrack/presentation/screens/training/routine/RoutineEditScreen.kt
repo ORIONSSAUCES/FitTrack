@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.constants.SetType
+import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 
 private val dayNames = listOf(
     "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
@@ -232,11 +233,18 @@ private fun ExerciseEditorCard(
         Column(modifier = Modifier.padding(12.dp)) {
             // Header: name + reorder + remove
             Row(verticalAlignment = Alignment.CenterVertically) {
+                ExerciseThumb(
+                    imagePath = exercise.exerciseImagePath,
+                    contentDescription = exercise.exerciseName,
+                    size = 36.dp
+                )
                 Text(
                     text = "${index + 1}. ${exercise.exerciseName}",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
                 )
                 IconButton(
                     onClick = { viewModel.onMoveExercise(index, index - 1) },
@@ -416,6 +424,13 @@ private fun ExercisePickerDialog(
                 LazyColumn(modifier = Modifier.height(320.dp)) {
                     items(exercises, key = { it.id }) { exercise ->
                         DropdownMenuItem(
+                            leadingIcon = {
+                                ExerciseThumb(
+                                    imagePath = exercise.imagePath,
+                                    contentDescription = exercise.name,
+                                    size = 36.dp
+                                )
+                            },
                             text = {
                                 Column {
                                     Text(exercise.name)

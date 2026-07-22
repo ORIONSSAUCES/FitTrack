@@ -28,15 +28,27 @@ class RoutineRepositoryImpl @Inject constructor(
             exerciseDao.observeAll()
         ) { routines, exercises ->
             val exerciseById = exercises.associateBy { it.id }
-            routines.map { it.toDomain { id -> exerciseById[id]?.name.orEmpty() to
-                (exerciseById[id]?.muscleGroup ?: "") } }
+            routines.map { relation ->
+                relation.toDomain { id ->
+                    val exercise = exerciseById[id]
+                    Triple(
+                        exercise?.name.orEmpty(),
+                        exercise?.muscleGroup ?: "",
+                        exercise?.imagePath
+                    )
+                }
+            }
         }
 
     override suspend fun getById(id: Long): Routine? {
         val relation = routineDao.getWithExercises(id) ?: return null
         return relation.toDomain { exerciseId ->
             val exercise = exerciseDao.getById(exerciseId)
-            exercise?.name.orEmpty() to (exercise?.muscleGroup ?: "")
+            Triple(
+                exercise?.name.orEmpty(),
+                exercise?.muscleGroup ?: "",
+                exercise?.imagePath
+            )
         }
     }
 
@@ -88,7 +100,7 @@ class RoutineRepositoryImpl @Inject constructor(
     }
 
     private inline fun RoutineWithExercises.toDomain(
-        exerciseInfo: (Long) -> Pair<String, String>
+        exerciseInfo: (Long) -> Triple<String, String, String?>
     ) = Routine(
         id = routine.id,
         name = routine.name,
@@ -97,11 +109,12 @@ class RoutineRepositoryImpl @Inject constructor(
         exercises = exercises
             .sortedBy { it.routineExercise.position }
             .map { relation ->
-                val (name, muscleGroupName) = exerciseInfo(relation.routineExercise.exerciseId)
+                val (name, muscleGroupName, imagePath) = exerciseInfo(relation.routineExercise.exerciseId)
                 RoutineExercise(
                     id = relation.routineExercise.id,
                     exerciseId = relation.routineExercise.exerciseId,
                     exerciseName = name,
+                    exerciseImagePath = imagePath,
                     muscleGroupName = runCatching {
                         MuscleGroup.valueOf(muscleGroupName).displayName
                     }.getOrDefault(muscleGroupName),

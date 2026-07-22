@@ -43,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.core.utils.DateUtils
+import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,11 +134,19 @@ fun WorkoutDetailScreen(
                         .padding(bottom = 12.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            text = exercise.exerciseName,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            ExerciseThumb(
+                                imagePath = exercise.exerciseImagePath,
+                                contentDescription = exercise.exerciseName,
+                                size = 40.dp
+                            )
+                            Text(
+                                text = exercise.exerciseName,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                         exercise.sets
                             .filter { it.isCompleted }

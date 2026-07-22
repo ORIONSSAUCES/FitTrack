@@ -24,6 +24,7 @@ import javax.inject.Inject
 data class EditableExercise(
     val exerciseId: Long,
     val exerciseName: String,
+    val exerciseImagePath: String? = null,
     val restSeconds: Int = 120,
     val notes: String = "",
     val sets: List<EditableSet> = listOf(EditableSet(), EditableSet(), EditableSet())
@@ -79,6 +80,7 @@ class RoutineEditViewModel @Inject constructor(
                             EditableExercise(
                                 exerciseId = exercise.exerciseId,
                                 exerciseName = exercise.exerciseName,
+                                exerciseImagePath = exercise.exerciseImagePath,
                                 restSeconds = exercise.restSeconds,
                                 notes = exercise.notes,
                                 sets = exercise.sets.map { set ->
@@ -110,7 +112,8 @@ class RoutineEditViewModel @Inject constructor(
         it.copy(
             exercises = it.exercises + EditableExercise(
                 exerciseId = exercise.id,
-                exerciseName = exercise.name
+                exerciseName = exercise.name,
+                exerciseImagePath = exercise.imagePath
             ),
             showExercisePicker = false
         )

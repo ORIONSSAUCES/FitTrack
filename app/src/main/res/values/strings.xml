@@ -250,7 +250,7 @@
     <string name="reminder_training_hint">Notificación a la hora elegida</string>
     <string name="reminder_time_label">Hora</string>
     <string name="reminder_weight_label">Pesaje semanal</string>
-    <string name="reminder_weight_hint">El día de control, a las 08:00</string>
+    <string name="reminder_weight_hint">El día de control, a la hora elegida</string>
     <string name="reminder_training_title">Hora de entrenar 💪</string>
     <string name="reminder_training_text">Tu rutina de hoy te espera. ¡Una repetición más!</string>
     <string name="reminder_weight_title">Día de control ⚖️</string>

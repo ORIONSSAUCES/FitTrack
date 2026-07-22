@@ -15,6 +15,7 @@ data class RoutineExercise(
     val exerciseId: Long,
     val exerciseName: String = "",
     val muscleGroupName: String = "",
+    val exerciseImagePath: String? = null,
     val position: Int = 0,
     val restSeconds: Int = 120,
     val notes: String = "",

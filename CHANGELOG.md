@@ -3,6 +3,13 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.0.1]
+
+### Agregado
+- Miniaturas circulares de ejercicios (estilo Hevy) en: biblioteca, entrenamiento activo,
+  detalle de sesión del historial, editor de rutinas y selector de ejercicios
+- Hora configurable para el recordatorio de pesaje semanal
+
 ## [1.0.0] - MVP completo
 
 ### Agregado

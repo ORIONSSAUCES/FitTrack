@@ -174,13 +174,71 @@ fun RemindersSection(
                     onCheckedChange = { enabled ->
                         if (enabled) {
                             withNotificationPermission {
-                                viewModel.onWeightReminderChange(true)
+                                viewModel.onWeightReminderChange(
+                                    true, settings.weightHour, settings.weightMinute
+                                )
                             }
                         } else {
-                            viewModel.onWeightReminderChange(false)
+                            viewModel.onWeightReminderChange(
+                                false, settings.weightHour, settings.weightMinute
+                            )
                         }
                     }
                 )
+            }
+
+            if (settings.weightEnabled) {
+                Spacer(modifier = Modifier.height(8.dp))
+                var weightHourText by remember(settings.weightHour) {
+                    mutableStateOf(settings.weightHour.toString())
+                }
+                var weightMinuteText by remember(settings.weightMinute) {
+                    mutableStateOf("%02d".format(settings.weightMinute))
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(R.string.reminder_time_label),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = weightHourText,
+                        onValueChange = { value ->
+                            weightHourText = value
+                            value.toIntOrNull()?.let { hour ->
+                                if (hour in 0..23) {
+                                    viewModel.onWeightReminderChange(
+                                        true, hour,
+                                        weightMinuteText.toIntOrNull()?.coerceIn(0, 59) ?: 0
+                                    )
+                                }
+                            }
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.width(72.dp)
+                    )
+                    Text(" : ", color = MaterialTheme.colorScheme.onSurface)
+                    OutlinedTextField(
+                        value = weightMinuteText,
+                        onValueChange = { value ->
+                            weightMinuteText = value
+                            value.toIntOrNull()?.let { minute ->
+                                if (minute in 0..59) {
+                                    viewModel.onWeightReminderChange(
+                                        true,
+                                        weightHourText.toIntOrNull()?.coerceIn(0, 23) ?: 8,
+                                        minute
+                                    )
+                                }
+                            }
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.width(72.dp)
+                    )
+                }
             }
         }
     }

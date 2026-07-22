@@ -56,6 +56,7 @@ import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.domain.model.WorkoutExercise
 import com.brunoapp.fittrack.domain.model.WorkoutSet
+import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -316,11 +317,19 @@ private fun ExerciseWorkoutCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = exercise.exerciseName,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ExerciseThumb(
+                    imagePath = exercise.exerciseImagePath,
+                    contentDescription = exercise.exerciseName,
+                    size = 40.dp
+                )
+                Text(
+                    text = exercise.exerciseName,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+            }
             if (exercise.notes.isNotBlank()) {
                 Text(
                     text = exercise.notes,

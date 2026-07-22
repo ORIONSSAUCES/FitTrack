@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.constants.MuscleGroup
 import com.brunoapp.fittrack.domain.model.Exercise
+import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
 @Composable
@@ -156,9 +157,18 @@ private fun ExerciseCard(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            ExerciseThumb(
+                imagePath = exercise.imagePath,
+                contentDescription = exercise.name
+            )
+            Spacer(modifier = Modifier.height(0.dp))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp)
+            ) {
                 Text(
                     text = exercise.name,
                     style = MaterialTheme.typography.titleMedium,

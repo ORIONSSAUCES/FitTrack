@@ -34,9 +34,9 @@ class ReminderScheduler @Inject constructor(
         workManager.cancelUniqueWork("training_reminder")
     }
 
-    /** Weekly reminder on the profile's check day at 08:00. */
-    fun scheduleWeightReminder(dayOfWeek: Int) {
-        val delay = delayUntilNextWeekday(dayOfWeek, 8, 0)
+    /** Weekly reminder on the profile's check day at the chosen time. */
+    fun scheduleWeightReminder(dayOfWeek: Int, hour: Int, minute: Int) {
+        val delay = delayUntilNextWeekday(dayOfWeek, hour, minute)
         val request = PeriodicWorkRequestBuilder<WeightReminderWorker>(7, TimeUnit.DAYS)
             .setInitialDelay(delay.toMinutes(), TimeUnit.MINUTES)
             .build()

@@ -34,12 +34,12 @@ class RemindersViewModel @Inject constructor(
         }
     }
 
-    fun onWeightReminderChange(enabled: Boolean) {
+    fun onWeightReminderChange(enabled: Boolean, hour: Int, minute: Int) {
         viewModelScope.launch {
-            userPreferences.setWeightReminder(enabled)
+            userPreferences.setWeightReminder(enabled, hour, minute)
             if (enabled) {
                 val checkDay = profileRepository.getProfile()?.weeklyCheckDay ?: 0
-                scheduler.scheduleWeightReminder(checkDay)
+                scheduler.scheduleWeightReminder(checkDay, hour, minute)
             } else {
                 scheduler.cancelWeightReminder()
             }
