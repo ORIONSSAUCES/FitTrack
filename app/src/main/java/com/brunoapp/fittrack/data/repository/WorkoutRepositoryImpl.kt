@@ -2,6 +2,7 @@ package com.brunoapp.fittrack.data.repository
 
 import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.core.utils.Calculations
+import com.brunoapp.fittrack.core.utils.ProgressionCalc
 import com.brunoapp.fittrack.data.database.dao.ActiveWorkoutStateDao
 import com.brunoapp.fittrack.data.database.dao.ExerciseDao
 import com.brunoapp.fittrack.data.database.dao.PersonalRecordDao
@@ -80,6 +81,13 @@ class WorkoutRepositoryImpl @Inject constructor(
 
                 relation.sets.sortedBy { it.setNumber }.forEach { template ->
                     val previous = previousBySetNumber[template.setNumber]
+                    // Double progression: prefill the suggested weight for today
+                    val suggestion = ProgressionCalc.suggest(
+                        previousWeightKg = previous?.weightKg,
+                        previousReps = previous?.reps,
+                        repsMin = template.repsMin,
+                        repsMax = template.repsMax
+                    )
                     workoutDao.insertSet(
                         WorkoutSetEntity(
                             workoutExerciseId = workoutExerciseId,
@@ -87,7 +95,9 @@ class WorkoutRepositoryImpl @Inject constructor(
                             setType = template.setType,
                             targetRepsMin = template.repsMin,
                             targetRepsMax = template.repsMax,
-                            weightKg = previous?.weightKg ?: template.targetWeightKg,
+                            weightKg = suggestion?.weightKg
+                                ?: previous?.weightKg
+                                ?: template.targetWeightKg,
                             previousWeightKg = previous?.weightKg,
                             previousReps = previous?.reps
                         )

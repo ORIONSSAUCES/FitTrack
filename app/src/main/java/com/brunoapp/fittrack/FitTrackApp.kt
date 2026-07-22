@@ -28,12 +28,23 @@ class FitTrackApp : Application() {
     }
 
     private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            "reminders",
-            getString(R.string.notification_channel_reminders),
-            NotificationManager.IMPORTANCE_DEFAULT
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(
+            NotificationChannel(
+                "reminders",
+                getString(R.string.notification_channel_reminders),
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
         )
-        getSystemService(NotificationManager::class.java)
-            .createNotificationChannel(channel)
+        manager.createNotificationChannel(
+            NotificationChannel(
+                "rest_timer",
+                getString(R.string.notification_channel_rest),
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 300, 150, 300)
+            }
+        )
     }
 }

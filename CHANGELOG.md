@@ -3,6 +3,22 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.1.0]
+
+### Agregado
+- Asistente de progresión (doble progresión automática):
+  - Cada serie muestra la meta de hoy calculada desde tu última sesión:
+    "→ 80×10" (una rep más) o "⬆ 82.5×8" (subir peso tras alcanzar el tope del rango)
+  - El peso sugerido viene precargado en el campo — la decisión está tomada antes de la serie
+- Notificación de fin de descanso:
+  - Alarma exacta con vibración aunque la pantalla esté bloqueada
+  - Se cancela al saltar el descanso y se reprograma con +15/−15 s
+- Comparador de fotos lado a lado:
+  - Botón "Comparar fotos" en Progreso → Fotos (con 2+ registros)
+  - Selector de fecha en cada panel, poses frontal/lateral/posterior
+  - Diferencia de peso entre ambas fechas
+- 7 pruebas unitarias del asistente de progresión
+
 ## [1.0.1]
 
 ### Agregado

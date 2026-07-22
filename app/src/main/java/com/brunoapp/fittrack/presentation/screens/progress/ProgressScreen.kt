@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Compare
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
@@ -473,6 +474,7 @@ private fun MeasurementDialog(
 private fun PhotosTab(viewModel: ProgressViewModel) {
     val photos by viewModel.photos.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
+    var showCompare by remember { mutableStateOf(false) }
     var photoToDelete by remember { mutableStateOf<ProgressPhoto?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -496,6 +498,19 @@ private fun PhotosTab(viewModel: ProgressViewModel) {
                 )
             }
         } else {
+            Column(modifier = Modifier.fillMaxSize()) {
+            if (photos.size >= 2) {
+                OutlinedButton(
+                    onClick = { showCompare = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp)
+                ) {
+                    Icon(Icons.Filled.Compare, contentDescription = null)
+                    Spacer(modifier = Modifier.height(0.dp))
+                    Text("  " + stringResource(R.string.photo_compare_title))
+                }
+            }
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
@@ -572,6 +587,7 @@ private fun PhotosTab(viewModel: ProgressViewModel) {
                 }
                 item { Spacer(modifier = Modifier.height(80.dp)) }
             }
+            }
         }
 
         FloatingActionButton(
@@ -584,6 +600,13 @@ private fun PhotosTab(viewModel: ProgressViewModel) {
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.photo_add))
         }
+    }
+
+    if (showCompare) {
+        PhotoCompareDialog(
+            photos = photos,
+            onDismiss = { showCompare = false }
+        )
     }
 
     if (showAddDialog) {

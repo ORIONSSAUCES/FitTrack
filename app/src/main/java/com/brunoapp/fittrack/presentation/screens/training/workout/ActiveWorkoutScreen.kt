@@ -49,13 +49,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
 import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.domain.model.WorkoutExercise
 import com.brunoapp.fittrack.domain.model.WorkoutSet
+import com.brunoapp.fittrack.core.utils.ProgressionCalc
 import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
@@ -417,16 +417,30 @@ private fun SetRow(
             }
         }
 
-        // Previous
-        Text(
-            text = if (set.previousWeightKg != null && set.previousReps != null)
-                "${formatW(set.previousWeightKg)}×${set.previousReps}"
-            else "${set.targetRepsMin}–${set.targetRepsMax}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textDecoration = if (set.previousWeightKg == null) TextDecoration.None else TextDecoration.None,
-            modifier = Modifier.weight(1.1f)
-        )
+        // Previous + today's goal (double progression)
+        Column(modifier = Modifier.weight(1.1f)) {
+            Text(
+                text = if (set.previousWeightKg != null && set.previousReps != null)
+                    "${formatW(set.previousWeightKg)}×${set.previousReps}"
+                else "${set.targetRepsMin}–${set.targetRepsMax}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            val suggestion = ProgressionCalc.suggest(
+                previousWeightKg = set.previousWeightKg,
+                previousReps = set.previousReps,
+                repsMin = set.targetRepsMin,
+                repsMax = set.targetRepsMax
+            )
+            if (suggestion != null && !set.isCompleted) {
+                Text(
+                    text = (if (suggestion.isWeightIncrease) "⬆ " else "→ ") +
+                        "${formatW(suggestion.weightKg)}×${suggestion.reps}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
 
         // Weight input
         OutlinedTextField(

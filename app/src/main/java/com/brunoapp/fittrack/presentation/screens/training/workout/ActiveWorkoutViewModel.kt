@@ -6,6 +6,7 @@ import com.brunoapp.fittrack.core.utils.Validators
 import com.brunoapp.fittrack.domain.model.WorkoutSession
 import com.brunoapp.fittrack.domain.model.WorkoutSummary
 import com.brunoapp.fittrack.domain.repository.WorkoutRepository
+import com.brunoapp.fittrack.worker.RestAlarm
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -41,7 +42,8 @@ data class ActiveSessionUiState(
 
 @HiltViewModel
 class ActiveWorkoutViewModel @Inject constructor(
-    private val repository: WorkoutRepository
+    private val repository: WorkoutRepository,
+    private val restAlarm: RestAlarm
 ) : ViewModel() {
 
     val sessionState: StateFlow<ActiveSessionUiState> = repository.observeActiveSession()
@@ -143,6 +145,7 @@ class ActiveWorkoutViewModel @Inject constructor(
         if (seconds <= 0) return
         restEndTimeMs = System.currentTimeMillis() + seconds * 1000L
         restTotalSeconds = seconds
+        restEndTimeMs?.let { restAlarm.schedule(it) }
         viewModelScope.launch { repository.saveRestTimer(restEndTimeMs, seconds) }
         startTicker()
     }
@@ -151,6 +154,7 @@ class ActiveWorkoutViewModel @Inject constructor(
         timerJob?.cancel()
         restEndTimeMs = null
         _restTimer.value = null
+        restAlarm.cancel()
         viewModelScope.launch { repository.saveRestTimer(null, null) }
     }
 
@@ -159,6 +163,7 @@ class ActiveWorkoutViewModel @Inject constructor(
         val newEnd = maxOf(System.currentTimeMillis(), end + deltaSeconds * 1000L)
         restEndTimeMs = newEnd
         restTotalSeconds = maxOf(restTotalSeconds + deltaSeconds, 1)
+        restAlarm.schedule(newEnd)
         viewModelScope.launch { repository.saveRestTimer(newEnd, restTotalSeconds) }
         startTicker()
     }

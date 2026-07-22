@@ -255,4 +255,14 @@
     <string name="reminder_training_text">Tu rutina de hoy te espera. ¡Una repetición más!</string>
     <string name="reminder_weight_title">Día de control ⚖️</string>
     <string name="reminder_weight_text">Pésate en ayunas y regístralo en FitTrack.</string>
+
+    <!-- Rest alarm -->
+    <string name="notification_channel_rest">Fin del descanso</string>
+    <string name="rest_done_title">¡Descanso terminado! 💪</string>
+    <string name="rest_done_text">Siguiente serie. Recuerda: cuando aparezca la voz, una repetición más.</string>
+
+    <!-- Photo comparison -->
+    <string name="photo_compare_title">Comparar fotos</string>
+    <string name="photo_compare_diff">Diferencia de peso: %1$s kg</string>
+    <string name="photo_compare_missing">Sin foto de esta pose</string>
 </resources>
