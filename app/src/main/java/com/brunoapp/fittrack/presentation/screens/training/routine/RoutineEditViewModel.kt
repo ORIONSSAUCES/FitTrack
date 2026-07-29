@@ -3,6 +3,7 @@ package com.brunoapp.fittrack.presentation.screens.training.routine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brunoapp.fittrack.core.constants.MuscleGroup
 import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.core.utils.ListUtils
 import com.brunoapp.fittrack.domain.model.Exercise
@@ -46,7 +47,9 @@ data class RoutineEditUiState(
     val isSaved: Boolean = false,
     val isEditMode: Boolean = false,
     val showExercisePicker: Boolean = false,
-    val pickerQuery: String = ""
+    val pickerQuery: String = "",
+    val pickerMuscle: MuscleGroup? = null,
+    val pickerFavoritesOnly: Boolean = false
 )
 
 @HiltViewModel
@@ -104,9 +107,24 @@ class RoutineEditViewModel @Inject constructor(
     fun onDescriptionChange(value: String) = update { it.copy(description = value) }
     fun onDayChange(day: Int?) = update { it.copy(dayOfWeek = day) }
 
-    fun onShowPicker() = update { it.copy(showExercisePicker = true, pickerQuery = "") }
+    fun onShowPicker() = update {
+        it.copy(
+            showExercisePicker = true,
+            pickerQuery = "",
+            pickerMuscle = null,
+            pickerFavoritesOnly = false
+        )
+    }
     fun onDismissPicker() = update { it.copy(showExercisePicker = false) }
     fun onPickerQueryChange(query: String) = update { it.copy(pickerQuery = query) }
+
+    fun onPickerMuscleSelect(muscle: MuscleGroup?) = update {
+        it.copy(pickerMuscle = if (it.pickerMuscle == muscle) null else muscle)
+    }
+
+    fun onPickerFavoritesToggle() = update {
+        it.copy(pickerFavoritesOnly = !it.pickerFavoritesOnly)
+    }
 
     fun onAddExercise(exercise: Exercise) = update {
         it.copy(

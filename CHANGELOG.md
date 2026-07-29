@@ -3,6 +3,15 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.1.1]
+
+### Mejorado
+- Selector de ejercicios a pantalla completa (estilo Hevy):
+  - Chip de Favoritos ⭐ en lugar del filtro de equipamiento
+  - Filtros por grupo muscular deslizables
+  - Contador de resultados, miniaturas grandes y estrellas de efectividad
+  - Los ejercicios se listan ordenados por efectividad
+
 ## [1.1.0]
 
 ### Agregado

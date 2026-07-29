@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.FilterChip
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +25,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -51,9 +56,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.brunoapp.fittrack.R
+import com.brunoapp.fittrack.core.constants.MuscleGroup
 import com.brunoapp.fittrack.core.constants.SetType
+import com.brunoapp.fittrack.core.utils.ExerciseFilter
 import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 
 private val dayNames = listOf(
@@ -208,11 +217,17 @@ fun RoutineEditScreen(
     if (state.showExercisePicker) {
         ExercisePickerDialog(
             query = state.pickerQuery,
-            exercises = allExercises.filter {
-                state.pickerQuery.isBlank() ||
-                    it.name.lowercase().contains(state.pickerQuery.trim().lowercase())
-            },
+            selectedMuscle = state.pickerMuscle,
+            favoritesOnly = state.pickerFavoritesOnly,
+            exercises = ExerciseFilter.apply(
+                exercises = allExercises,
+                query = state.pickerQuery,
+                muscleGroup = state.pickerMuscle,
+                favoritesOnly = state.pickerFavoritesOnly
+            ),
             onQueryChange = viewModel::onPickerQueryChange,
+            onMuscleSelect = viewModel::onPickerMuscleSelect,
+            onFavoritesToggle = viewModel::onPickerFavoritesToggle,
             onSelect = viewModel::onAddExercise,
             onDismiss = viewModel::onDismissPicker
         )
@@ -402,56 +417,151 @@ private fun SetEditorRow(
 @Composable
 private fun ExercisePickerDialog(
     query: String,
+    selectedMuscle: MuscleGroup?,
+    favoritesOnly: Boolean,
     exercises: List<com.brunoapp.fittrack.domain.model.Exercise>,
     onQueryChange: (String) -> Unit,
+    onMuscleSelect: (MuscleGroup?) -> Unit,
+    onFavoritesToggle: () -> Unit,
     onSelect: (com.brunoapp.fittrack.domain.model.Exercise) -> Unit,
     onDismiss: () -> Unit
 ) {
-    AlertDialog(
+    Dialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.routine_pick_exercise)) },
-        text = {
-            Column {
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            color = MaterialTheme.colorScheme.background,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+
+                // Header
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(stringResource(R.string.action_cancel))
+                    }
+                    Text(
+                        text = stringResource(R.string.routine_pick_exercise),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        text = stringResource(R.string.picker_result_count, exercises.size),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                }
+
+                // Search
                 OutlinedTextField(
                     value = query,
                     onValueChange = onQueryChange,
                     placeholder = { Text(stringResource(R.string.exercise_search_hint)) },
                     leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.height(320.dp)) {
-                    items(exercises, key = { it.id }) { exercise ->
-                        DropdownMenuItem(
-                            leadingIcon = {
+
+                // Filters: favorites + muscle groups (Hevy-style)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .horizontalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp)
+                ) {
+                    FilterChip(
+                        selected = favoritesOnly,
+                        onClick = onFavoritesToggle,
+                        label = { Text(stringResource(R.string.exercise_filter_favorites)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = if (favoritesOnly)
+                                    MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.width(18.dp)
+                            )
+                        }
+                    )
+                    MuscleGroup.entries.forEach { muscle ->
+                        FilterChip(
+                            selected = selectedMuscle == muscle,
+                            onClick = { onMuscleSelect(muscle) },
+                            label = { Text(muscle.displayName) }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Results
+                if (exercises.isEmpty()) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.exercise_empty_list),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(exercises, key = { it.id }) { exercise ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onSelect(exercise) }
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            ) {
                                 ExerciseThumb(
                                     imagePath = exercise.imagePath,
                                     contentDescription = exercise.name,
-                                    size = 36.dp
+                                    size = 48.dp
                                 )
-                            },
-                            text = {
-                                Column {
-                                    Text(exercise.name)
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 12.dp)
+                                ) {
                                     Text(
-                                        text = exercise.muscleGroup.displayName,
+                                        text = exercise.name,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = pickerTierStars(exercise.effectivenessTier) +
+                                            exercise.muscleGroup.displayName,
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                            },
-                            onClick = { onSelect(exercise) }
-                        )
+                            }
+                        }
+                        item { Spacer(modifier = Modifier.height(24.dp)) }
                     }
                 }
             }
-        },
-        confirmButton = {},
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.action_cancel))
-            }
         }
-    )
+    }
+}
+
+private fun pickerTierStars(tier: Int): String = when (tier) {
+    1 -> "★★★ "
+    2 -> "★★ "
+    else -> "★ "
 }

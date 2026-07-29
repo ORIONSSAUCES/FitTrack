@@ -265,4 +265,6 @@
     <string name="photo_compare_title">Comparar fotos</string>
     <string name="photo_compare_diff">Diferencia de peso: %1$s kg</string>
     <string name="photo_compare_missing">Sin foto de esta pose</string>
+
+    <string name="picker_result_count">%1$d resultados</string>
 </resources>
