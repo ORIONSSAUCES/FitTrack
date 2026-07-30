@@ -3,6 +3,15 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.2.1]
+
+### Cambiado
+- Rutinas actualizadas al plan definitivo de 5 días (planilla de julio 2026):
+  - Lunes — Pecho y Tríceps · Martes — Piernas (Cuádriceps) · Miércoles — Espalda y Bíceps ·
+    Jueves — Piernas (Femoral) · Viernes — Hombros y Extras
+  - Series exactas de la planilla (incl. Extensión de cuádriceps 2×martes / 3×jueves)
+  - Las nuevas rutinas se agregan sin tocar las existentes; las viejas pueden borrarse manualmente
+
 ## [1.2.0]
 
 ### Agregado

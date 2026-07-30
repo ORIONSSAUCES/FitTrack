@@ -55,7 +55,11 @@ class DatabaseSeeder @Inject constructor(
         if (dietDao.countPlans() == 0) {
             seedDietPlan()
         }
-        if (routineDao.countRoutines() == 0) {
+        // Seed the current routine plan when none of its days exist yet.
+        // Existing user routines are never touched or deleted.
+        val existingRoutineNames = routineDao.getAllRoutineNames().toSet()
+        val seedNames = RoutineSeed.all().map { it.name }.toSet()
+        if (existingRoutineNames.intersect(seedNames).isEmpty()) {
             seedRoutines()
         }
     }
