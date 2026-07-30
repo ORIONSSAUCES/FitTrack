@@ -19,11 +19,14 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +59,7 @@ import com.brunoapp.fittrack.core.constants.SetType
 import com.brunoapp.fittrack.domain.model.WorkoutExercise
 import com.brunoapp.fittrack.domain.model.WorkoutSet
 import com.brunoapp.fittrack.core.utils.ProgressionCalc
+import com.brunoapp.fittrack.presentation.components.ExercisePickerFullScreen
 import com.brunoapp.fittrack.presentation.components.ExerciseThumb
 import com.brunoapp.fittrack.presentation.theme.GoldRecord
 
@@ -71,6 +75,10 @@ fun ActiveWorkoutScreen(
     val newRecord by viewModel.newRecordEvent.collectAsState()
     val inputError by viewModel.inputError.collectAsState()
     val summary by viewModel.summary.collectAsState()
+    val allExercises by viewModel.allExercises.collectAsState()
+    val replaceTarget by viewModel.replaceTarget.collectAsState()
+    val replaceWarning by viewModel.replaceWarning.collectAsState()
+    val noteTarget by viewModel.noteTarget.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var showDiscardDialog by remember { mutableStateOf(false) }
     var showFinishDialog by remember { mutableStateOf(false) }
@@ -191,6 +199,67 @@ fun ActiveWorkoutScreen(
             }
             item { Spacer(modifier = Modifier.height(24.dp)) }
         }
+    }
+
+    // Replace-exercise picker
+    if (replaceTarget != null) {
+        ExercisePickerFullScreen(
+            title = stringResource(R.string.workout_replace_exercise),
+            exercises = allExercises,
+            onSelect = viewModel::onPickReplacement,
+            onDismiss = viewModel::onDismissReplacePicker
+        )
+    }
+
+    // Warning when replacing an exercise with completed sets
+    if (replaceWarning != null) {
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissReplaceWarning,
+            title = { Text(stringResource(R.string.workout_replace_warning_title)) },
+            text = { Text(stringResource(R.string.workout_replace_warning_message)) },
+            confirmButton = {
+                TextButton(onClick = viewModel::onConfirmReplaceWarning) {
+                    Text(
+                        stringResource(R.string.workout_replace_confirm),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::onDismissReplaceWarning) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
+
+    // Exercise note dialog
+    noteTarget?.let { targetId ->
+        val exerciseNotes = current.exercises
+            .firstOrNull { it.id == targetId }?.notes.orEmpty()
+        var noteText by remember(targetId) { mutableStateOf(exerciseNotes) }
+        AlertDialog(
+            onDismissRequest = viewModel::onDismissNote,
+            title = { Text(stringResource(R.string.workout_exercise_note)) },
+            text = {
+                OutlinedTextField(
+                    value = noteText,
+                    onValueChange = { noteText = it },
+                    placeholder = { Text(stringResource(R.string.workout_note_hint)) },
+                    minLines = 2
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { viewModel.onSaveNote(noteText) }) {
+                    Text(stringResource(R.string.action_save))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::onDismissNote) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
     }
 
     if (showDiscardDialog) {
@@ -327,8 +396,42 @@ private fun ExerciseWorkoutCard(
                     text = exercise.exerciseName,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 10.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 10.dp)
                 )
+                var menuExpanded by remember { mutableStateOf(false) }
+                Box {
+                    IconButton(onClick = { menuExpanded = true }) {
+                        Icon(
+                            Icons.Filled.MoreVert,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = menuExpanded,
+                        onDismissRequest = { menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.workout_replace_exercise)) },
+                            onClick = {
+                                menuExpanded = false
+                                viewModel.onRequestReplace(
+                                    exercise.id,
+                                    exercise.sets.any { it.isCompleted }
+                                )
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.workout_exercise_note)) },
+                            onClick = {
+                                menuExpanded = false
+                                viewModel.onRequestNote(exercise.id)
+                            }
+                        )
+                    }
+                }
             }
             if (exercise.notes.isNotBlank()) {
                 Text(

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.brunoapp.fittrack.core.utils.Validators
 import com.brunoapp.fittrack.domain.model.WorkoutSession
 import com.brunoapp.fittrack.domain.model.WorkoutSummary
+import com.brunoapp.fittrack.domain.model.Exercise
+import com.brunoapp.fittrack.domain.repository.ExerciseRepository
 import com.brunoapp.fittrack.domain.repository.WorkoutRepository
 import com.brunoapp.fittrack.worker.RestAlarm
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,8 +45,16 @@ data class ActiveSessionUiState(
 @HiltViewModel
 class ActiveWorkoutViewModel @Inject constructor(
     private val repository: WorkoutRepository,
+    exerciseRepository: ExerciseRepository,
     private val restAlarm: RestAlarm
 ) : ViewModel() {
+
+    val allExercises: StateFlow<List<Exercise>> = exerciseRepository.observeAll()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
     val sessionState: StateFlow<ActiveSessionUiState> = repository.observeActiveSession()
         .map { ActiveSessionUiState(isLoading = false, session = it) }
@@ -138,6 +148,56 @@ class ActiveWorkoutViewModel @Inject constructor(
 
     fun onRecordEventShown() { _newRecordEvent.value = false }
     fun onInputErrorShown() { _inputError.value = false }
+
+    // ── Replace exercise mid-workout ──
+
+    /** WorkoutExercise id whose replacement picker is open. */
+    private val _replaceTarget = MutableStateFlow<Long?>(null)
+    val replaceTarget: StateFlow<Long?> = _replaceTarget.asStateFlow()
+
+    /** Pending confirmation when the exercise already has completed sets. */
+    private val _replaceWarning = MutableStateFlow<Long?>(null)
+    val replaceWarning: StateFlow<Long?> = _replaceWarning.asStateFlow()
+
+    fun onRequestReplace(workoutExerciseId: Long, hasCompletedSets: Boolean) {
+        if (hasCompletedSets) _replaceWarning.value = workoutExerciseId
+        else _replaceTarget.value = workoutExerciseId
+    }
+
+    fun onConfirmReplaceWarning() {
+        _replaceTarget.value = _replaceWarning.value
+        _replaceWarning.value = null
+    }
+
+    fun onDismissReplaceWarning() { _replaceWarning.value = null }
+    fun onDismissReplacePicker() { _replaceTarget.value = null }
+
+    fun onPickReplacement(exercise: Exercise) {
+        val target = _replaceTarget.value ?: return
+        viewModelScope.launch {
+            repository.replaceExercise(target, exercise.id)
+            // Clear stale text inputs for this exercise's sets
+            _inputs.value = emptyMap()
+            _replaceTarget.value = null
+        }
+    }
+
+    // ── Exercise notes ──
+
+    /** WorkoutExercise id whose note dialog is open. */
+    private val _noteTarget = MutableStateFlow<Long?>(null)
+    val noteTarget: StateFlow<Long?> = _noteTarget.asStateFlow()
+
+    fun onRequestNote(workoutExerciseId: Long) { _noteTarget.value = workoutExerciseId }
+    fun onDismissNote() { _noteTarget.value = null }
+
+    fun onSaveNote(notes: String) {
+        val target = _noteTarget.value ?: return
+        viewModelScope.launch {
+            repository.updateExerciseNotes(target, notes.trim())
+            _noteTarget.value = null
+        }
+    }
 
     // ── Rest timer ──
 

@@ -69,6 +69,12 @@ interface WorkoutDao {
     @Insert
     suspend fun insertWorkoutExercise(exercise: WorkoutExerciseEntity): Long
 
+    @Query("UPDATE workout_exercise SET exerciseId = :newExerciseId WHERE id = :id")
+    suspend fun updateWorkoutExerciseId(id: Long, newExerciseId: Long)
+
+    @Query("UPDATE workout_exercise SET notes = :notes WHERE id = :id")
+    suspend fun updateWorkoutExerciseNotes(id: Long, notes: String)
+
     // ── Sets ──
 
     @Insert

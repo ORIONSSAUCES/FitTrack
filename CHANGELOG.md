@@ -3,6 +3,15 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.2.0]
+
+### Agregado
+- Menú ⋮ en cada ejercicio durante el entrenamiento activo:
+  - Reemplazar ejercicio: abre el selector completo (favoritos + músculos), mantiene
+    las series objetivo y recalcula "Anterior" y la meta de progresión con el
+    historial del ejercicio nuevo. Advierte si ya había series completadas.
+  - Nota del ejercicio: editable en vivo (ej: "asiento en posición 3")
+
 ## [1.1.1]
 
 ### Mejorado

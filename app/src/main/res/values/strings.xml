@@ -267,4 +267,12 @@
     <string name="photo_compare_missing">Sin foto de esta pose</string>
 
     <string name="picker_result_count">%1$d resultados</string>
+
+    <!-- Mid-workout actions -->
+    <string name="workout_replace_exercise">Reemplazar ejercicio</string>
+    <string name="workout_replace_warning_title">Series ya completadas</string>
+    <string name="workout_replace_warning_message">Este ejercicio tiene series completadas. Al reemplazarlo se reiniciarán todas sus series. ¿Continuar?</string>
+    <string name="workout_replace_confirm">Reemplazar igual</string>
+    <string name="workout_exercise_note">Nota del ejercicio</string>
+    <string name="workout_note_hint">Ej: máquina 4, asiento en posición 3…</string>
 </resources>

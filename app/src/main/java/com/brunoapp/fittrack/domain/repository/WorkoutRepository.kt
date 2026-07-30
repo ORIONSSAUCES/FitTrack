@@ -13,6 +13,11 @@ interface WorkoutRepository {
     suspend fun completeSet(setId: Long, weightKg: Double, reps: Int, rir: Int?): SetCompletionResult
     suspend fun uncompleteSet(setId: Long)
     suspend fun addSet(workoutExerciseId: Long)
+
+    /** Swaps the exercise mid-workout; resets set completion and recomputes prefills. */
+    suspend fun replaceExercise(workoutExerciseId: Long, newExerciseId: Long)
+
+    suspend fun updateExerciseNotes(workoutExerciseId: Long, notes: String)
     suspend fun removeSet(setId: Long)
     suspend fun finishSession(): WorkoutSummary?
     suspend fun discardSession()

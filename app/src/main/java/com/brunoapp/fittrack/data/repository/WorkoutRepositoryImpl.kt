@@ -178,6 +178,43 @@ class WorkoutRepositoryImpl @Inject constructor(
         workoutDao.deleteSet(setId)
     }
 
+    override suspend fun replaceExercise(workoutExerciseId: Long, newExerciseId: Long) {
+        val session = workoutDao.getActiveSession() ?: return
+        val relation = session.exercises
+            .firstOrNull { it.workoutExercise.id == workoutExerciseId } ?: return
+
+        val previousBySetNumber = workoutDao
+            .getPreviousSetsForExercise(newExerciseId)
+            .associateBy { it.setNumber }
+
+        workoutDao.updateWorkoutExerciseId(workoutExerciseId, newExerciseId)
+
+        relation.sets.forEach { oldSet ->
+            val previous = previousBySetNumber[oldSet.setNumber]
+            val suggestion = ProgressionCalc.suggest(
+                previousWeightKg = previous?.weightKg,
+                previousReps = previous?.reps,
+                repsMin = oldSet.targetRepsMin,
+                repsMax = oldSet.targetRepsMax
+            )
+            workoutDao.updateSet(
+                oldSet.copy(
+                    weightKg = suggestion?.weightKg ?: previous?.weightKg,
+                    reps = null,
+                    rir = null,
+                    isCompleted = false,
+                    isPersonalRecord = false,
+                    completedAt = null,
+                    previousWeightKg = previous?.weightKg,
+                    previousReps = previous?.reps
+                )
+            )
+        }
+    }
+
+    override suspend fun updateExerciseNotes(workoutExerciseId: Long, notes: String) =
+        workoutDao.updateWorkoutExerciseNotes(workoutExerciseId, notes)
+
     override suspend fun finishSession(): WorkoutSummary? {
         val session = workoutDao.getActiveSession() ?: return null
         val now = Instant.now()
