@@ -3,6 +3,15 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.2.2]
+
+### Cambiado
+- Días de pierna reestructurados a 2 sesiones de pierna completa:
+  - Martes — Piernas A: Hack 45° · Curl femoral sentado · Extensión de cuádriceps · Gemelos sentado
+  - Jueves — Piernas B: Prensa 45° · Peso muerto rumano · Zancada búlgara · Gemelos de pie
+- El seeder ahora agrega individualmente las rutinas del plan que falten (por nombre),
+  sin tocar ni duplicar las existentes
+
 ## [1.2.1]
 
 ### Cambiado

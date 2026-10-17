@@ -41,14 +41,14 @@ object RoutineSeed {
             )
         ),
         SeedRoutine(
-            name = "Martes — Piernas (Cuádriceps)",
-            description = "Énfasis en cuádriceps. Última serie al fallo técnico.",
+            name = "Martes — Piernas A",
+            description = "Pierna completa: cuádriceps + femoral + gemelos. Última serie al fallo técnico.",
             dayOfWeek = 1,
             exercises = listOf(
-                SeedExercise("Hack Squat", 180, workingSets(3, 8, 12)),
-                SeedExercise("Prensa 45°", 150, workingSets(3, 8, 12)),
+                SeedExercise("Hack Squat", 180, workingSets(3, 8, 12),
+                    "Máquina a 45°"),
                 SeedExercise("Curl femoral sentado", 120, workingSets(3, 10, 15)),
-                SeedExercise("Extensión de cuádriceps", 120, workingSets(2, 12, 15)),
+                SeedExercise("Extensión de cuádriceps", 120, workingSets(3, 12, 15)),
                 SeedExercise("Elevación de talones sentado", 90, workingSets(3, 12, 15),
                     "Pausa abajo, rango completo")
             )
@@ -68,17 +68,17 @@ object RoutineSeed {
             )
         ),
         SeedRoutine(
-            name = "Jueves — Piernas (Femoral)",
-            description = "Énfasis en cadena posterior. Última serie al fallo técnico.",
+            name = "Jueves — Piernas B",
+            description = "Pierna completa: prensa + cadena posterior + unilateral. Última serie al fallo técnico.",
             dayOfWeek = 3,
             exercises = listOf(
-                SeedExercise("Peso muerto rumano con mancuernas", 180, workingSets(3, 8, 12),
+                SeedExercise("Prensa 45°", 180, workingSets(3, 8, 12)),
+                SeedExercise("Peso muerto rumano con mancuernas", 150, workingSets(3, 8, 12),
                     "Cadera atrás, mancuernas pegadas a las piernas"),
-                SeedExercise("Curl femoral tumbado", 120, workingSets(3, 10, 15)),
-                SeedExercise("Prensa 45°", 150, workingSets(3, 8, 12),
-                    "Pies ALTOS en la plataforma: énfasis en glúteos y femorales"),
-                SeedExercise("Extensión de cuádriceps", 120, workingSets(3, 12, 15)),
-                SeedExercise("Elevación de talones sentado", 90, workingSets(3, 12, 15))
+                SeedExercise("Zancada búlgara", 120, workingSets(3, 8, 12),
+                    "Por pierna. Pie trasero elevado en banco"),
+                SeedExercise("Elevación de talones de pie", 90, workingSets(3, 10, 15),
+                    "Rango completo, pausa abajo")
             )
         ),
         SeedRoutine(
