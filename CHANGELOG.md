@@ -3,6 +3,18 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.4.0]
+
+### Cambiado
+- Nueva dieta activa "Dieta económica — Volumen" (5 comidas, 7 días):
+  desayuno de huevos + leche + avena, almuerzo de pollo o carne + arroz + verduras salteadas,
+  licuado con proteína y creatina, yogur proteico, y cena de sardinas o atún + huevos + ensalada.
+  ~2.460–2.530 kcal y ~206 g de proteína diarios. Objetivos del plan ajustados a esos valores.
+- El plan anterior queda guardado como inactivo (se puede borrar o volver a activar).
+
+### Agregado
+- Alimentos: arroz blanco cocido, carne vacuna magra, repollo, zanahoria, acelga y aceite vegetal.
+
 ## [1.3.0]
 
 ### Agregado

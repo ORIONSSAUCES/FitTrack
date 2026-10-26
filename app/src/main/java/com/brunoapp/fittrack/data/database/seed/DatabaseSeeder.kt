@@ -54,7 +54,7 @@ class DatabaseSeeder @Inject constructor(
 
         when (preset) {
             PlanPreset.GYM -> {
-                if (dietDao.countPlans() == 0) seedDietPlan()
+                seedDietPlanOnce()
                 // Adds plan routines missing by exact name; never deletes user routines
                 seedMissingRoutines(RoutineSeed.all())
             }
@@ -87,6 +87,11 @@ class DatabaseSeeder @Inject constructor(
         if (foodDao.countRecipes() == 0) {
             seedRecipes()
         }
+        // Foods added in later versions (inserted by name if missing)
+        val foodNames = foodDao.getAllFoodsOnce().map { it.name }.toSet()
+        val newFoods = FoodSeed.economicAdditions().filter { it.name !in foodNames }
+        if (newFoods.isNotEmpty()) foodDao.upsertFoods(newFoods)
+
         // At-home exercises (inserted by name if missing)
         val names = exerciseDao.getAllNamesOnce().toSet()
         val homeMissing = HomeExerciseSeed.all().filter { it.name !in names }
@@ -144,6 +149,20 @@ class DatabaseSeeder @Inject constructor(
         }
     }
 
+    /**
+     * Seeds the current diet plan once and makes it the active one.
+     * Older plans are kept (inactive); a deleted plan is never re-created.
+     */
+    private suspend fun seedDietPlanOnce() {
+        val name = DietPlanSeed.PLAN_NAME
+        if (name in userPreferences.seededDiets.first()) return
+        if (name !in dietDao.getAllPlanNames()) {
+            dietDao.deactivateAll()
+            seedDietPlan()
+        }
+        userPreferences.addSeededDiet(name)
+    }
+
     private suspend fun seedDietPlan() {
         val foodIdByName = foodDao.getAllFoodsOnce().associate { it.name to it.id }
         val recipeIdByName = foodDao.getAllRecipesOnce().associate { it.name to it.id }
@@ -153,6 +172,18 @@ class DatabaseSeeder @Inject constructor(
                 name = DietPlanSeed.PLAN_NAME,
                 description = DietPlanSeed.PLAN_DESCRIPTION,
                 isActive = true,
+                caloriesTraining = DietPlanSeed.CALORIES,
+                proteinTraining = DietPlanSeed.PROTEIN,
+                carbsTraining = DietPlanSeed.CARBS,
+                fatTraining = DietPlanSeed.FAT,
+                fiberTraining = DietPlanSeed.FIBER,
+                waterTrainingMl = DietPlanSeed.WATER_ML,
+                caloriesRest = DietPlanSeed.CALORIES,
+                proteinRest = DietPlanSeed.PROTEIN,
+                carbsRest = DietPlanSeed.CARBS,
+                fatRest = DietPlanSeed.FAT,
+                fiberRest = DietPlanSeed.FIBER,
+                waterRestMl = DietPlanSeed.WATER_ML,
                 createdAt = Instant.now().toString()
             )
         )

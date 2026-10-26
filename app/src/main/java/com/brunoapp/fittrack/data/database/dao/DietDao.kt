@@ -20,6 +20,9 @@ interface DietDao {
     @Query("SELECT COUNT(*) FROM diet_plan")
     suspend fun countPlans(): Int
 
+    @Query("SELECT name FROM diet_plan")
+    suspend fun getAllPlanNames(): List<String>
+
     @Query("SELECT * FROM diet_plan ORDER BY name COLLATE NOCASE")
     fun observePlans(): Flow<List<DietPlanEntity>>
 

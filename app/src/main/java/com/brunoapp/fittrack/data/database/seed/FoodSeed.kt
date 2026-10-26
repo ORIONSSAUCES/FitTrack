@@ -142,4 +142,47 @@ object FoodSeed {
             servingSize = 5.0, servingUnit = "g", notes = "5 g diarios, cualquier momento del día"
         )
     )
+
+    /** Foods added for the economic diet (v1.4). Inserted by name if missing. */
+    fun economicAdditions(): List<FoodItemEntity> = listOf(
+        FoodItemEntity(
+            name = "Arroz blanco cocido", brand = "",
+            caloriesPer100 = 130.0, proteinPer100 = 2.7, carbsPer100 = 28.2,
+            fatPer100 = 0.3, fiberPer100 = 0.4,
+            servingSize = 250.0, servingUnit = "g",
+            notes = "Pesar COCIDO. 250 g cocido ≈ 85 g en crudo"
+        ),
+        FoodItemEntity(
+            name = "Carne vacuna magra", brand = "",
+            caloriesPer100 = 130.0, proteinPer100 = 21.0, carbsPer100 = 0.0,
+            fatPer100 = 5.0, fiberPer100 = 0.0,
+            servingSize = 200.0, servingUnit = "g",
+            notes = "Pesar en crudo. Cortes magros: nalga, peceto, cuadrada, bola de lomo"
+        ),
+        FoodItemEntity(
+            name = "Repollo", brand = "",
+            caloriesPer100 = 25.0, proteinPer100 = 1.3, carbsPer100 = 5.8,
+            fatPer100 = 0.1, fiberPer100 = 2.5,
+            servingSize = 150.0, servingUnit = "g", notes = ""
+        ),
+        FoodItemEntity(
+            name = "Zanahoria", brand = "",
+            caloriesPer100 = 41.0, proteinPer100 = 0.9, carbsPer100 = 9.6,
+            fatPer100 = 0.2, fiberPer100 = 2.8,
+            servingSize = 100.0, servingUnit = "g", notes = "1 mediana ≈ 80-100 g"
+        ),
+        FoodItemEntity(
+            name = "Acelga", brand = "",
+            caloriesPer100 = 19.0, proteinPer100 = 1.8, carbsPer100 = 3.7,
+            fatPer100 = 0.2, fiberPer100 = 1.6,
+            servingSize = 150.0, servingUnit = "g", notes = ""
+        ),
+        FoodItemEntity(
+            name = "Aceite vegetal", brand = "",
+            caloriesPer100 = 884.0, proteinPer100 = 0.0, carbsPer100 = 0.0,
+            fatPer100 = 100.0, fiberPer100 = 0.0,
+            servingSize = 10.0, servingUnit = "ml",
+            notes = "1 cucharada ≈ 10 ml. Medir con cuchara: 'un chorrito' suele ser el doble"
+        )
+    )
 }

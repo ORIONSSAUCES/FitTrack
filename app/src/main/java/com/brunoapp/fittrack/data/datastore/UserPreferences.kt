@@ -32,6 +32,7 @@ class UserPreferences(
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val PLAN_PRESET = stringPreferencesKey("plan_preset")
         val SEEDED_ROUTINES = stringSetPreferencesKey("seeded_routines")
+        val SEEDED_DIETS = stringSetPreferencesKey("seeded_diets")
         val TRAINING_REMINDER_ENABLED = booleanPreferencesKey("training_reminder_enabled")
         val TRAINING_REMINDER_HOUR = intPreferencesKey("training_reminder_hour")
         val TRAINING_REMINDER_MINUTE = intPreferencesKey("training_reminder_minute")
@@ -64,6 +65,16 @@ class UserPreferences(
     suspend fun addSeededRoutines(names: Set<String>) {
         context.dataStore.edit {
             it[Keys.SEEDED_ROUTINES] = (it[Keys.SEEDED_ROUTINES] ?: emptySet()) + names
+        }
+    }
+
+    /** Names of diet plans already seeded once. */
+    val seededDiets: Flow<Set<String>> =
+        context.dataStore.data.map { it[Keys.SEEDED_DIETS] ?: emptySet() }
+
+    suspend fun addSeededDiet(name: String) {
+        context.dataStore.edit {
+            it[Keys.SEEDED_DIETS] = (it[Keys.SEEDED_DIETS] ?: emptySet()) + name
         }
     }
 
