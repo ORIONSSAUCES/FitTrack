@@ -2,7 +2,12 @@ package com.brunoapp.fittrack.presentation.screens.training.workout
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brunoapp.fittrack.core.utils.ProgressionCalc
+import com.brunoapp.fittrack.core.utils.SetEntryResolver
 import com.brunoapp.fittrack.core.utils.Validators
+import com.brunoapp.fittrack.domain.model.WorkoutExercise
+import com.brunoapp.fittrack.domain.model.WorkoutSet
+import com.brunoapp.fittrack.domain.repository.ProfileRepository
 import com.brunoapp.fittrack.domain.model.WorkoutSession
 import com.brunoapp.fittrack.domain.model.WorkoutSummary
 import com.brunoapp.fittrack.domain.model.Exercise
@@ -46,8 +51,12 @@ data class ActiveSessionUiState(
 class ActiveWorkoutViewModel @Inject constructor(
     private val repository: WorkoutRepository,
     exerciseRepository: ExerciseRepository,
+    private val profileRepository: ProfileRepository,
     private val restAlarm: RestAlarm
 ) : ViewModel() {
+
+    /** Fallback rest when an exercise has no specific rest configured. */
+    private var defaultRestSeconds: Int = 120
 
     val allExercises: StateFlow<List<Exercise>> = exerciseRepository.observeAll()
         .stateIn(
@@ -74,6 +83,14 @@ class ActiveWorkoutViewModel @Inject constructor(
     private val _restTimer = MutableStateFlow<RestTimerState?>(null)
     val restTimer: StateFlow<RestTimerState?> = _restTimer.asStateFlow()
 
+    /** Remaining seconds while the rest timer is paused; null when running/idle. */
+    private val _restPausedRemaining = MutableStateFlow<Int?>(null)
+    val restPausedRemaining: StateFlow<Int?> = _restPausedRemaining.asStateFlow()
+
+    /** Fires when a rest period ends naturally ("next set" cue). */
+    private val _restFinished = MutableStateFlow(false)
+    val restFinished: StateFlow<Boolean> = _restFinished.asStateFlow()
+
     private val _newRecordEvent = MutableStateFlow(false)
     val newRecordEvent: StateFlow<Boolean> = _newRecordEvent.asStateFlow()
 
@@ -88,6 +105,11 @@ class ActiveWorkoutViewModel @Inject constructor(
     private var restTotalSeconds: Int = 0
 
     init {
+        viewModelScope.launch {
+            profileRepository.getProfile()?.defaultRestSeconds
+                ?.takeIf { it > 0 }
+                ?.let { defaultRestSeconds = it }
+        }
         // Restore rest timer after process death
         viewModelScope.launch {
             repository.getRestTimer()?.let { (endMs, total) ->
@@ -132,6 +154,70 @@ class ActiveWorkoutViewModel @Inject constructor(
             if (result.isNewRecord) _newRecordEvent.value = true
             startRest(restSeconds)
         }
+    }
+
+    // ── Fast entry (redesigned table) ──
+
+    /** Current editable values of a set: local edit or stored/prefilled values. */
+    fun currentInput(set: WorkoutSet): SetInput =
+        inputFor(set.id, set.weightKg, set.reps, set.rir)
+
+    /**
+     * Placeholder weight: the previous set's (edited or stored) weight.
+     * [edits] lets the UI pass its observed snapshot so rows recompose on change.
+     */
+    fun placeholderWeight(
+        exercise: WorkoutExercise,
+        set: WorkoutSet,
+        edits: Map<Long, SetInput> = _inputs.value
+    ): Double? {
+        val index = exercise.sets.indexOfFirst { it.id == set.id }
+        if (index <= 0) return null
+        val previous = exercise.sets[index - 1]
+        val text = edits[previous.id]?.weightText ?: currentInput(previous).weightText
+        return Validators.parseLiftWeight(text).getOrNull() ?: previous.weightKg
+    }
+
+    /** Placeholder reps: today's double-progression target, if there is history. */
+    fun placeholderReps(set: WorkoutSet): Int? =
+        ProgressionCalc.suggest(
+            previousWeightKg = set.previousWeightKg,
+            previousReps = set.previousReps,
+            repsMin = set.targetRepsMin,
+            repsMax = set.targetRepsMax
+        )?.reps
+
+    /**
+     * One-tap confirmation: typed values, or the visible grey placeholders.
+     * Saves, marks the set completed and starts the configured rest.
+     */
+    fun onConfirmSet(exercise: WorkoutExercise, set: WorkoutSet) {
+        val input = currentInput(set)
+        val resolved = SetEntryResolver.resolve(
+            weightText = input.weightText,
+            repsText = input.repsText,
+            fallbackWeightKg = placeholderWeight(exercise, set),
+            fallbackReps = placeholderReps(set)
+        )
+        if (!resolved.isValid) {
+            _inputError.value = true
+            return
+        }
+        val rir = input.rirText.trim().toIntOrNull()?.coerceIn(0, 10)
+        val rest = exercise.restSeconds.takeIf { it > 0 } ?: defaultRestSeconds
+        viewModelScope.launch {
+            val result = repository.completeSet(set.id, resolved.weightKg!!, resolved.reps!!, rir)
+            // Drop the local edit: the stored values are now the source of truth
+            _inputs.value = _inputs.value - set.id
+            if (result.isNewRecord) _newRecordEvent.value = true
+            startRest(rest)
+        }
+    }
+
+    /** Copies the previous set's weight into this set. */
+    fun onRepeatPreviousWeight(exercise: WorkoutExercise, set: WorkoutSet) {
+        val weight = placeholderWeight(exercise, set) ?: return
+        onWeightChange(set.id, formatWeight(weight))
     }
 
     fun onUncompleteSet(setId: Long) {
@@ -201,8 +287,29 @@ class ActiveWorkoutViewModel @Inject constructor(
 
     // ── Rest timer ──
 
+    fun onPauseRest() {
+        val remaining = _restTimer.value?.remainingSeconds ?: return
+        timerJob?.cancel()
+        restEndTimeMs = null
+        restAlarm.cancel()
+        _restPausedRemaining.value = remaining
+        viewModelScope.launch { repository.saveRestTimer(null, null) }
+    }
+
+    fun onResumeRest() {
+        val remaining = _restPausedRemaining.value ?: return
+        _restPausedRemaining.value = null
+        val total = restTotalSeconds
+        startRest(remaining)
+        restTotalSeconds = total  // keep the progress bar relative to the full rest
+    }
+
+    fun onRestFinishedShown() { _restFinished.value = false }
+
     fun startRest(seconds: Int) {
         if (seconds <= 0) return
+        _restPausedRemaining.value = null
+        _restFinished.value = false
         restEndTimeMs = System.currentTimeMillis() + seconds * 1000L
         restTotalSeconds = seconds
         restEndTimeMs?.let { restAlarm.schedule(it) }
@@ -214,6 +321,7 @@ class ActiveWorkoutViewModel @Inject constructor(
         timerJob?.cancel()
         restEndTimeMs = null
         _restTimer.value = null
+        _restPausedRemaining.value = null
         restAlarm.cancel()
         viewModelScope.launch { repository.saveRestTimer(null, null) }
     }
@@ -237,6 +345,7 @@ class ActiveWorkoutViewModel @Inject constructor(
                 if (remaining <= 0) {
                     _restTimer.value = null
                     restEndTimeMs = null
+                    _restFinished.value = true
                     repository.saveRestTimer(null, null)
                     break
                 }

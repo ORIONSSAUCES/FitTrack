@@ -3,6 +3,26 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.5.0]
+
+### Rediseñado — Pantalla de entrenamiento activo
+- Encabezado: día y grupo muscular, cronómetro del entrenamiento y menú (Minimizar / Finalizar / Descartar).
+- Tarjeta de progreso: ejercicios completados, barra por series, tiempo, volumen y porcentaje.
+- Ejercicios en acordeón: tarjeta compacta (imagen numerada, nota técnica, series, rango de reps, estado)
+  que se expande con un toque; solo uno abierto a la vez, en cualquier orden.
+- Tabla de series compacta: Serie · Anterior · Peso · Reps · ✓, campos de 40 dp con teclado numérico,
+  serie activa resaltada, ▲ discreto cuando se supera la sesión anterior, 🏆 en récords.
+- Registro en un toque: los valores sugeridos (peso de la serie anterior y reps objetivo)
+  se muestran en gris y se usan al confirmar si el campo está vacío.
+- Tocar el número de serie: repetir el peso anterior o eliminar la serie (con confirmación si estaba completada).
+  Se quitó la ✗ permanente de cada fila.
+- Botón "Siguiente ejercicio" al completar uno; "Finalizar entrenamiento" al final de la lista,
+  resaltado cuando todo está completo, con aviso de series pendientes.
+- Descanso compacto: ±15 s, pausa/reanudar y saltar; aviso "¡Siguiente serie!" al terminar.
+  Usa el descanso del ejercicio o, si no tiene, el del perfil.
+- La pantalla se ajusta al teclado (adjustResize + imePadding).
+- 6 pruebas unitarias nuevas (SetEntryResolver).
+
 ## [1.4.0]
 
 ### Cambiado

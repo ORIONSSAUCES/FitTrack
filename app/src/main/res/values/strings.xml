@@ -285,4 +285,26 @@
     <string name="plan_gym_desc">Rutina de 5 días de gimnasio y plan de dieta de Bruno.</string>
     <string name="plan_none_title">Empezar vacío</string>
     <string name="plan_none_desc">Sin rutinas ni dieta precargadas. Armas todo desde cero.</string>
+
+    <!-- Active workout redesign -->
+    <string name="workout_finish_full">Finalizar entrenamiento</string>
+    <string name="workout_discard_full">Descartar entrenamiento</string>
+    <string name="workout_finish_message_pending">Quedan %1$d series sin completar. Se guardará la sesión solo con las series completadas.</string>
+    <string name="workout_progress_title">Progreso del día</string>
+    <string name="workout_progress_exercises">%1$d de %2$d ejercicios</string>
+    <string name="workout_progress_volume">%1$d kg movidos</string>
+    <string name="workout_chip_sets">%1$d series</string>
+    <string name="workout_chip_reps">%1$s reps</string>
+    <string name="workout_status_done">Completado</string>
+    <string name="workout_next_exercise">Siguiente </string>
+    <string name="workout_col_set">Serie</string>
+    <string name="workout_col_weight">Peso (kg)</string>
+    <string name="workout_col_reps">Reps</string>
+    <string name="workout_repeat_weight">Repetir peso anterior (%1$s kg)</string>
+    <string name="workout_delete_set">Eliminar serie</string>
+    <string name="workout_delete_set_title">¿Eliminar serie completada?</string>
+    <string name="workout_delete_set_message">Se perderá el registro de esta serie.</string>
+    <string name="workout_rest_label">Descanso</string>
+    <string name="workout_rest_paused">Descanso en pausa</string>
+    <string name="workout_rest_done_banner">¡Descanso terminado! Siguiente serie</string>
 </resources>
