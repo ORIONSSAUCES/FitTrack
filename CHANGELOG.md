@@ -3,6 +3,26 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.3.0]
+
+### Agregado
+- Selector de plan en el primer inicio: Entrenamiento en casa / Gimnasio / Empezar vacío.
+  Las instalaciones existentes se detectan como "Gimnasio" y no ven el selector.
+- Plan "Entrenamiento en casa" (4 días: lun, mar, jue, vie), tren superior/inferior,
+  con disco de 5 kg, silla y colchoneta. Pensado para recuperación postparto:
+  sin abdominales tipo crunch, sin saltos, series sin llegar al fallo (RIR 2).
+- 21 ejercicios nuevos en casa con imágenes femeninas e instrucciones.
+- Equipamiento nuevo: "Disco".
+
+### Corregido
+- Las rutinas del plan que el usuario borra ya no vuelven a aparecer al reiniciar.
+
+## [1.2.3]
+
+### Corregido
+- Entrenamiento activo: al escribir las repeticiones se borraba el peso precargado.
+  Ahora la primera edición de una serie parte de los valores ya cargados.
+
 ## [1.2.2]
 
 ### Cambiado

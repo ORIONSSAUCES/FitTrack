@@ -3,28 +3,15 @@ package com.brunoapp.fittrack
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.brunoapp.fittrack.data.database.seed.DatabaseSeeder
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltAndroidApp
 class FitTrackApp : Application() {
 
-    @Inject
-    lateinit var seeder: DatabaseSeeder
-
-    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
+    // Database seeding runs from MainViewModel, after the plan preset is known.
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        applicationScope.launch {
-            seeder.seedIfNeeded()
-        }
     }
 
     private fun createNotificationChannel() {

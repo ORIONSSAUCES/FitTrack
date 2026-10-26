@@ -13,6 +13,11 @@ import com.brunoapp.fittrack.data.database.entity.PlannedMealEntity
 import com.brunoapp.fittrack.data.database.entity.PlannedMealItemEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeEntity
 import com.brunoapp.fittrack.data.database.entity.RecipeIngredientEntity
+import com.brunoapp.fittrack.data.datastore.PlanPreset
+import com.brunoapp.fittrack.data.datastore.UserPreferences
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,9 +31,39 @@ class DatabaseSeeder @Inject constructor(
     private val exerciseDao: ExerciseDao,
     private val foodDao: FoodDao,
     private val dietDao: DietDao,
-    private val routineDao: RoutineDao
+    private val routineDao: RoutineDao,
+    private val userPreferences: UserPreferences
 ) {
-    suspend fun seedIfNeeded() {
+    private val mutex = Mutex()
+
+    /**
+     * Shared library content is always seeded. Personal content (routines,
+     * diet) depends on the plan preset chosen on first launch. Installs that
+     * already have data are treated as the GYM preset.
+     */
+    suspend fun seedIfNeeded() = mutex.withLock {
+        seedLibrary()
+
+        var preset = userPreferences.planPreset.first()
+        if (preset == null &&
+            (routineDao.countRoutines() > 0 || dietDao.countPlans() > 0)
+        ) {
+            preset = PlanPreset.GYM
+            userPreferences.setPlanPreset(PlanPreset.GYM)
+        }
+
+        when (preset) {
+            PlanPreset.GYM -> {
+                if (dietDao.countPlans() == 0) seedDietPlan()
+                // Adds plan routines missing by exact name; never deletes user routines
+                seedMissingRoutines(RoutineSeed.all())
+            }
+            PlanPreset.HOME -> seedMissingRoutines(HomeRoutineSeed.all())
+            else -> Unit
+        }
+    }
+
+    private suspend fun seedLibrary() {
         if (exerciseDao.count() == 0) {
             exerciseDao.upsertAll(ExerciseSeed.all())
         }
@@ -52,20 +87,21 @@ class DatabaseSeeder @Inject constructor(
         if (foodDao.countRecipes() == 0) {
             seedRecipes()
         }
-        if (dietDao.countPlans() == 0) {
-            seedDietPlan()
-        }
-        // Seed any plan routine that doesn't exist yet (by exact name).
-        // Existing user routines are never touched or deleted.
-        seedMissingRoutines()
+        // At-home exercises (inserted by name if missing)
+        val names = exerciseDao.getAllNamesOnce().toSet()
+        val homeMissing = HomeExerciseSeed.all().filter { it.name !in names }
+        if (homeMissing.isNotEmpty()) exerciseDao.upsertAll(homeMissing)
     }
 
-    private suspend fun seedMissingRoutines() {
+    private suspend fun seedMissingRoutines(plan: List<RoutineSeed.SeedRoutine>) {
         val existingNames = routineDao.getAllRoutineNames().toSet()
-        val missing = RoutineSeed.all().filter { it.name !in existingNames }
+        val alreadySeeded = userPreferences.seededRoutines.first()
+        // Seed each plan routine only once: if the user deletes it, it stays deleted
+        val missing = plan.filter { it.name !in existingNames && it.name !in alreadySeeded }
         if (missing.isNotEmpty()) {
             seedRoutines(missing)
         }
+        userPreferences.addSeededRoutines(plan.map { it.name }.toSet())
     }
 
     private suspend fun seedRoutines(routines: List<RoutineSeed.SeedRoutine>) {

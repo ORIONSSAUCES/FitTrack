@@ -275,4 +275,14 @@
     <string name="workout_replace_confirm">Reemplazar igual</string>
     <string name="workout_exercise_note">Nota del ejercicio</string>
     <string name="workout_note_hint">Ej: máquina 4, asiento en posición 3…</string>
+
+    <!-- First-launch plan choice -->
+    <string name="plan_choice_title">¡Bienvenida/o a FitTrack!</string>
+    <string name="plan_choice_subtitle">¿Qué plan quieres cargar en este teléfono? Podrás editarlo después.</string>
+    <string name="plan_home_title">Entrenamiento en casa</string>
+    <string name="plan_home_desc">4 días (lun, mar, jue, vie) con un disco de 5 kg, silla y colchoneta. Apto para recuperación postparto.</string>
+    <string name="plan_gym_title">Gimnasio</string>
+    <string name="plan_gym_desc">Rutina de 5 días de gimnasio y plan de dieta de Bruno.</string>
+    <string name="plan_none_title">Empezar vacío</string>
+    <string name="plan_none_desc">Sin rutinas ni dieta precargadas. Armas todo desde cero.</string>
 </resources>

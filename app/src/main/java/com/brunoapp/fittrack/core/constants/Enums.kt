@@ -30,6 +30,7 @@ enum class Equipment(val displayName: String) {
     BAND("Banda elástica"),
     SMITH_MACHINE("Multipower"),
     EZ_BAR("Barra EZ"),
+    PLATE("Disco"),
     OTHER("Otro")
 }
 

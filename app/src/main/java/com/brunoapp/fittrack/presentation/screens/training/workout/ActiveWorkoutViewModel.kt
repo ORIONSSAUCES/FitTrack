@@ -264,7 +264,14 @@ class ActiveWorkoutViewModel @Inject constructor(
     }
 
     private fun updateInput(setId: Long, transform: (SetInput) -> SetInput) {
-        val current = _inputs.value[setId] ?: SetInput()
+        // First edit of a set: start from the prefilled values, not from empty.
+        // Otherwise typing reps would wipe the prefilled weight.
+        val current = _inputs.value[setId] ?: run {
+            val stored = sessionState.value.session?.exercises
+                ?.flatMap { it.sets }
+                ?.firstOrNull { it.id == setId }
+            inputFor(setId, stored?.weightKg, stored?.reps, stored?.rir)
+        }
         _inputs.value = _inputs.value + (setId to transform(current))
     }
 
