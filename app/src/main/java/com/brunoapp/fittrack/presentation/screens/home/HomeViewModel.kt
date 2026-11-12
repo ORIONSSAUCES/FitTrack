@@ -40,7 +40,9 @@ data class HomeUiState(
     val weeklyCompliance: Int? = null,
     val currentWeight: Double? = null,
     val weightDiff: Double? = null,      // vs previous entry
-    val nextWeighInDay: String = ""
+    val nextWeighInDay: String = "",
+    val showGuide: Boolean = false,      // GYM preset: nutrition guide instead of daily log
+    val guidePhase: Int = 1
 )
 
 @HiltViewModel
@@ -50,7 +52,8 @@ class HomeViewModel @Inject constructor(
     dailyLogRepository: DailyLogRepository,
     dietRepository: DietRepository,
     progressRepository: ProgressRepository,
-    profileRepository: ProfileRepository
+    profileRepository: ProfileRepository,
+    userPreferences: com.brunoapp.fittrack.data.datastore.UserPreferences
 ) : ViewModel() {
 
     private val today: LocalDate = LocalDate.now()
@@ -109,9 +112,16 @@ class HomeViewModel @Inject constructor(
         listOf(profile?.name.orEmpty(), current, diff, dayNames[checkDay])
     }
 
+    private val guideFlow = combine(
+        userPreferences.planPreset,
+        userPreferences.guidePhase
+    ) { preset, phase ->
+        (preset == com.brunoapp.fittrack.data.datastore.PlanPreset.GYM) to phase
+    }
+
     val uiState: StateFlow<HomeUiState> = combine(
-        trainingFlow, nutritionFlow, bodyFlow
-    ) { training, nutrition, body ->
+        trainingFlow, nutritionFlow, bodyFlow, guideFlow
+    ) { training, nutrition, body, guide ->
         val (todayRoutine, hasActive, weekSessions) = training
         @Suppress("UNCHECKED_CAST")
         val log = nutrition[0] as com.brunoapp.fittrack.domain.model.DailyLog?
@@ -132,7 +142,9 @@ class HomeViewModel @Inject constructor(
             weeklyCompliance = weekly,
             currentWeight = body[1] as Double?,
             weightDiff = body[2] as Double?,
-            nextWeighInDay = body[3] as String
+            nextWeighInDay = body[3] as String,
+            showGuide = guide.first,
+            guidePhase = guide.second
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
 

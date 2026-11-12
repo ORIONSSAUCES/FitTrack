@@ -7,6 +7,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.brunoapp.fittrack.data.datastore.PlanPreset
+import com.brunoapp.fittrack.presentation.screens.nutrition.guide.NutritionGuideScreen
+import com.brunoapp.fittrack.presentation.screens.nutrition.guide.NutritionGuideViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,6 +30,17 @@ fun NutritionScreen(
     onRecipeClick: (Long) -> Unit,
     onCreateRecipe: () -> Unit
 ) {
+    val guideViewModel: NutritionGuideViewModel = hiltViewModel()
+    val preset by guideViewModel.planPreset.collectAsState()
+    when (preset) {
+        "LOADING" -> return
+        PlanPreset.GYM -> {
+            // Bruno's phone: the two-phase guide replaces the logging tabs
+            NutritionGuideScreen(viewModel = guideViewModel)
+            return
+        }
+    }
+
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     val tabs = listOf(
         stringResource(R.string.nutrition_tab_today),

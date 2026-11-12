@@ -3,6 +3,25 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 Versionado: [SemVer](https://semver.org/lang/es/) simplificado (MAJOR.MINOR.PATCH).
 
+## [1.6.0]
+
+### Cambiado
+- Nutrición (plan Gimnasio): las pestañas de registro diario se reemplazan por una
+  Guía de nutrición en 2 fases.
+  - Fase 1 — Descenso a 95–96 kg: objetivos diarios, menú de día de entreno (~2.300 kcal)
+    y de descanso (~1.900 kcal) con ~210–220 g de proteína, reglas de alimentación,
+    tirzepatida según prospecto, señales de alarma, controles médicos, entrenamiento,
+    ajustes semanales, compras y cortes vacunos.
+  - Fase 2 — Volumen limpio: transición a mantenimiento, superávit chico, menú base
+    (~2.950 kcal), suspensión planificada de la tirzepatida, controles y entrenamiento.
+  - La Fase 2 se desbloquea al registrar 96 kg o menos y se inicia con confirmación.
+  - Progreso de peso: inicio 112,6 kg → meta, barra, ritmo semanal (promedios de 7 días)
+    con recomendación automática y semanas estimadas. Registro de peso en un toque.
+  - "Mi protocolo": notas personales editables.
+- Inicio (plan Gimnasio): la tarjeta de nutrición muestra la fase y los kg que faltan.
+- El plan "En casa" mantiene las pestañas de nutrición anteriores.
+- 5 pruebas unitarias nuevas (GuideProgress). Sin cambios en la base de datos.
+
 ## [1.5.0]
 
 ### Rediseñado — Pantalla de entrenamiento activo

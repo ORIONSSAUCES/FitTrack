@@ -33,6 +33,8 @@ class UserPreferences(
         val PLAN_PRESET = stringPreferencesKey("plan_preset")
         val SEEDED_ROUTINES = stringSetPreferencesKey("seeded_routines")
         val SEEDED_DIETS = stringSetPreferencesKey("seeded_diets")
+        val GUIDE_PHASE = intPreferencesKey("guide_phase")
+        val GUIDE_NOTES = stringPreferencesKey("guide_notes")
         val TRAINING_REMINDER_ENABLED = booleanPreferencesKey("training_reminder_enabled")
         val TRAINING_REMINDER_HOUR = intPreferencesKey("training_reminder_hour")
         val TRAINING_REMINDER_MINUTE = intPreferencesKey("training_reminder_minute")
@@ -76,6 +78,20 @@ class UserPreferences(
         context.dataStore.edit {
             it[Keys.SEEDED_DIETS] = (it[Keys.SEEDED_DIETS] ?: emptySet()) + name
         }
+    }
+
+    /** Active phase of the nutrition guide (1 = descent, 2 = lean bulk). */
+    val guidePhase: Flow<Int> = context.dataStore.data.map { it[Keys.GUIDE_PHASE] ?: 1 }
+
+    suspend fun setGuidePhase(phase: Int) {
+        context.dataStore.edit { it[Keys.GUIDE_PHASE] = phase.coerceIn(1, 2) }
+    }
+
+    /** Free-text personal protocol notes written by the user. */
+    val guideNotes: Flow<String> = context.dataStore.data.map { it[Keys.GUIDE_NOTES] ?: "" }
+
+    suspend fun setGuideNotes(notes: String) {
+        context.dataStore.edit { it[Keys.GUIDE_NOTES] = notes }
     }
 
     suspend fun setPlanPreset(preset: String) {

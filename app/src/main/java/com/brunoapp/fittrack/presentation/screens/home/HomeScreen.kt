@@ -125,64 +125,72 @@ fun HomeScreen(
             }
         }
 
-        // ── Nutrition today ──
-        Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onGoToNutrition)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Filled.Restaurant,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    Text(
-                        text = stringResource(R.string.home_nutrition_today),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                if (!state.dayStarted) {
-                    Text(
-                        text = stringResource(R.string.home_day_not_started),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                } else {
-                    HomeMacroBar(
-                        label = stringResource(R.string.home_calories),
-                        value = state.caloriesConsumed,
-                        goal = state.goals.calories,
-                        unit = "kcal"
-                    )
-                    HomeMacroBar(
-                        label = stringResource(R.string.home_protein),
-                        value = state.proteinConsumed,
-                        goal = state.goals.protein.toInt(),
-                        unit = "g"
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row {
-                        Text(
-                            text = stringResource(
-                                R.string.home_meals_completed,
-                                state.mealsCompleted, state.mealsTotal
-                            ),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.weight(1f)
+        // ── Nutrition: guide (GYM preset) or daily log ──
+        if (state.showGuide) {
+            HomeGuideCard(
+                phase = state.guidePhase,
+                currentWeight = state.currentWeight,
+                onClick = onGoToNutrition
+            )
+        } else {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onGoToNutrition)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Filled.Restaurant,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
                         )
-                        state.weeklyCompliance?.let {
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(
+                            text = stringResource(R.string.home_nutrition_today),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (!state.dayStarted) {
+                        Text(
+                            text = stringResource(R.string.home_day_not_started),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        HomeMacroBar(
+                            label = stringResource(R.string.home_calories),
+                            value = state.caloriesConsumed,
+                            goal = state.goals.calories,
+                            unit = "kcal"
+                        )
+                        HomeMacroBar(
+                            label = stringResource(R.string.home_protein),
+                            value = state.proteinConsumed,
+                            goal = state.goals.protein.toInt(),
+                            unit = "g"
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row {
                             Text(
-                                text = stringResource(R.string.daily_compliance_week, it),
+                                text = stringResource(
+                                    R.string.home_meals_completed,
+                                    state.mealsCompleted, state.mealsTotal
+                                ),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.weight(1f)
                             )
+                            state.weeklyCompliance?.let {
+                                Text(
+                                    text = stringResource(R.string.daily_compliance_week, it),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
@@ -262,5 +270,64 @@ private fun HomeMacroBar(label: String, value: Int, goal: Int, unit: String) {
             },
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+
+@Composable
+private fun HomeGuideCard(phase: Int, currentWeight: Double?, onClick: () -> Unit) {
+    val target = com.brunoapp.fittrack.data.guide.NutritionGuide.TARGET_WEIGHT_KG
+    val start = com.brunoapp.fittrack.data.guide.NutritionGuide.START_WEIGHT_KG
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.Filled.Restaurant,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.padding(4.dp))
+                Text(
+                    text = if (phase == 2) "Guía · Fase 2 — Volumen limpio" else "Guía · Fase 1 — Descenso",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            if (phase == 1) {
+                val current = currentWeight ?: start
+                val remaining = (current - target).coerceAtLeast(0.0)
+                Text(
+                    text = if (remaining > 0) "Faltan %.1f kg para %.0f kg".format(remaining, target).replace('.', ',')
+                    else "¡Meta alcanzada! Ya puedes iniciar la Fase 2",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                LinearProgressIndicator(
+                    progress = {
+                        com.brunoapp.fittrack.core.utils.GuideProgress.fraction(start, current, target)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Hoy: proteína primero, 200 g o más, y 3 L de agua.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                Text(
+                    text = "Proteína 190–200 g · subir 0,5–1 kg por mes",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
     }
 }
